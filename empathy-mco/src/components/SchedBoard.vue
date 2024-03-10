@@ -11,7 +11,7 @@
                 <div class="left-head">
                     <h3> Calendar </h3>
                     <div class="task-button">
-                        <v-btn class="add-task-btn" @click="handleButtonClick()">+ Add Task</v-btn>
+                        <v-btn class="add-task-btn" @click="addTask()">+ Add Task</v-btn>
                     </div>
                 </div>
 
@@ -32,10 +32,10 @@
 
 <script>
 export default {
-    name: 'SideNav',
+    name: 'SchedBoard',
     methods: {
-        handleButtonClick() {
-            // Handle button click event here
+        addTask() {
+            this.$router.push({ name: 'AddTask' });
         }
     },
     data() {
