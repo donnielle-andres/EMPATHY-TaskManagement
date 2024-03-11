@@ -14,7 +14,8 @@
       <!-- Task Label & Button -->
       <div class="task-head"> 
         <h3> Today's Tasks </h3>
-        <v-btn class="task-button" @click="handleButtonClick()" > + Add Task</v-btn> 
+        <v-btn class="task-button" @click="addTask()" > + Add Task</v-btn>
+        <task-form v-if="showAddTask" @close="showAddTask = false"  @taskAdded="showAddTask = false"></task-form>
       </div>
 
       <!-- Task Cards -->
@@ -60,6 +61,7 @@
     name: 'MainPage',
     data() {
       return {
+          showAddTask: false,
           currentTime: '', 
           currentDay: '', 
           tasks: [
@@ -90,8 +92,8 @@
         const formattedDate = now.toLocaleDateString(undefined, options);
         this.currentDay = `${formattedDate}, ${dayOfWeek}`;
       },
-      handleButtonClick() {
-        // Handle button click event here
+      addTask() {
+            this.showAddTask = true;
       }
     }
   };

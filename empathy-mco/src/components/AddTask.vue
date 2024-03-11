@@ -92,7 +92,7 @@
       },
       addTask() {
         // Add code to push thru the db
-        this.$router.push({ name: 'SchedBoard' }); // should refresh to the schedboard
+        // this.$router.push({ name: 'MainPage' }); // should refresh to the schedboard
         this.$emit('taskAdded'); // Emit the custom event
       }
   }
