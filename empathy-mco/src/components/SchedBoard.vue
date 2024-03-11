@@ -1,30 +1,16 @@
 <template>
     <div class="container">
         <div class="head">
-            Daily Recommender Schedule
+            Daily Recommender Schedule  <!-- <p>{{ dailySchedule }}</p> -->
         </div>
         
         <div class="board">
+            <div class="daily-sched">
+                <!-- Daily Schedule View Only -->
+                <!-- <DayPilotCalendar id="dp" :config="config" ref="calendarRef" />-->
+                <ejs-schedule :eventSettings="eventSettings"></ejs-schedule>
+                
 
-            <div class="left-section">
-
-                <div class="left-head">
-                    <h3> Calendar </h3>
-                    <div class="task-button">
-                        <v-btn class="add-task-btn" @click="addTask()">+ Add Task </v-btn>
-                        <task-form v-if="showAddTask" @close="showAddTask = false"  @taskAdded="showAddTask = false"></task-form>
-                        
-                    </div>
-                </div>
-
-                <div class="mini-cal">
-                    <!-- Mini calendar component or content goes here -->
-                    <VDatePicker class="calendar" v-model='selectedDate'> </VDatePicker>
-                </div>
-            </div>
-
-            <div class="right-section">
-                <!-- Right section content goes here -->
             </div>
 
         </div>
@@ -33,6 +19,9 @@
 </template>
 
 <script>
+import { Day } from '@syncfusion/ej2-vue-schedule';
+
+
 export default {
     name: 'SchedBoard',
     methods: {
@@ -43,9 +32,26 @@ export default {
     data() {
         return {
             showAddTask: false,
-            selectedDate: null,
+            selectedDate: new Date(2024, 3, 12),
+            eventSettings: {
+                dataSource: [{
+                    /** Add connection from the db */
+                }]
+            }
+        };
+    },
+    computed: {
+        formattedDate() {
+            if (!this.selectedDate) return '';
+            const date = new Date(this.selectedDate);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
         }
+    },
+    provide: {
+        schedule: [Day]
     }
+
 }
 </script>
 
@@ -61,7 +67,6 @@ export default {
         align-items: stretch; 
     }
 
-    /** Time Section Style */
     .head {
         font-weight: bolder;
         font-family: 'Inter';
@@ -70,74 +75,24 @@ export default {
         flex-direction: column;
         justify-content: center; 
         align-items: center; 
-        /** border-bottom: 2px solid black; */
         width: 100%;
-        height: 125px;
-        padding: 25px; 
+        height: 110px;
+        padding: 25px;
     }
 
     .board {
         display: flex;
-        justify-content: space-between;
         width: 100%;
     }
 
-    .left-section{
-        flex: 1;
-        padding: 10px;
-        border: 2px solid blue;
+    .daily-sched {
+        margin-left: 60px;
+        margin-right: 50px;
         height: 570px;
+        width: 1300px;
         position: static;
     }
-
-    .left-head {
-        display: flex;
-        gap: 180px; /* Aligns items horizontally with space between them */
-        align-items: center; /* Centers items vertically */
-        margin-top: 10px;
-        margin-bottom: 5px;
-        margin-left: 30px;
-        margin-right: 30px;
-        width: 100%; /* Ensures the container takes up the full width */
-    }
-
-
-    .task-button {
-        display: flex;
-        justify-content: center;
-        align-items: center; 
-        width: auto; 
-    }
-
-    .add-task-btn {
-        height: 30px;
-        width: 120px;
-        outline: 2px solid black;
-        border-radius: 5px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-weight: bold;
-        font-size: 14px;
-        box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
-    }
-
-    .add-task-btn:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-    }
-
-    .mini-cal {
-        display: flex; /* Enables Flexbox */
-        justify-content: center; /* Centers the calendar horizontally */
-        margin-top: 30px;
-        height: 70px;
-    }
-
-    .right-section {
-        flex: 2;
-        padding: 20px;
-        border: 2px solid rgb(5, 255, 101);
-        position: static;
-    }
+    
+    
 </style>
+

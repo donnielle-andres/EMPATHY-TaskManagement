@@ -54,14 +54,18 @@ export default {
 
 <style scoped>
     aside {
+        position: fixed; /* This makes the aside stick to the side */
+        top: 0; /* Positions the aside at the top of the viewport */
+        left: 0; /* Positions the aside at the left of the viewport */
         width: 200px;
         background-color: #E7E7E7;
         overflow: hidden;
-        min-height: auto;
+        min-height: 100vh; /* Adjusts the height to be at least the height of the viewport */
         padding: 10px;
         font-size: medium;
         font-weight: bolder;
         box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); /* Adds a drop shadow */
+        z-index: 1000; /* Ensures the aside stays on top of other content */
     }
 
     /* User */

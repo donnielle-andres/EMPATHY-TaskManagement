@@ -32,8 +32,22 @@
 
           <!-- To Do Table -->
           <div class="todo-table"> 
-            <task-table class="task-table" />
-          </div>
+          <table>
+            <thead>
+              <tr>
+                <th v-for="(column, index) in header" :key="index">{{ column.text }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(task, index) in tasks" :key="index">
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.priority }}</td>
+                <td>{{ task.deadline }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
       </div>
 
@@ -65,8 +79,14 @@
           currentTime: '', 
           currentDay: '', 
           tasks: [
-            { id: 1, title: 'Task 1', description: 'description 1', deadline: '03/10/2024'},
-            { id: 2, title: 'Task 2', description: 'description 2', deadline: '04/10/2024' }
+            { title: 'Task 1', description: 'description 1', priority: 'High Priority', deadline: '03/10/2024'},
+            { title: 'Task 2', description: 'description 2', priority: 'High Priority', deadline: '04/10/2024' }
+          ],
+          header: [
+            { text: 'Title', value: 'title' },
+            { text: 'Description', value: 'description' },
+            { text: 'Priority', value: 'priority' },
+            { text: 'Deadline', value: 'deadline' },
           ],
       };
     },
@@ -95,7 +115,16 @@
       addTask() {
             this.showAddTask = true;
       }
-    }
+    },
+
+    created() {
+        this.columns = [
+            { field: 'code', header: 'Code' },
+            { field: 'name', header: 'Name' },
+            { field: 'category', header: 'Category' },
+            { field: 'quantity', header: 'Quantity' }
+        ];
+    },
   };
 </script>
 
@@ -183,7 +212,6 @@
 
   .left-section {
     flex: 7; 
-    border: 2px solid black; 
     padding: 5px;
     height: 320px;
     position: static;
@@ -198,7 +226,7 @@
     margin: 20px;
     margin-top: 10px;
     height: 260px;
-    border: 2px solid black;
+    border: 2px solid #e7e7e7bb;
   }
 
 
@@ -224,7 +252,31 @@
     padding: 30px;
   }
 
+  .todo-table table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+      font-family: 'Inter';
+      
+  }
 
+  .todo-table th {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+  }
+
+  .todo-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+      font-size: 13px;
+  }
+
+  .todo-table th {
+      background-color: #f2f2f2;
+      color: black;
+  }
 
   
 </style>

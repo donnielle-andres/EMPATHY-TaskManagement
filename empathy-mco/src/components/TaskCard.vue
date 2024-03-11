@@ -71,7 +71,7 @@
    
    .task-description {
         height: 4em; /* Adjusted to ensure the container is tall enough for three lines */
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 500;
         color: #00000060;
         overflow: hidden;
