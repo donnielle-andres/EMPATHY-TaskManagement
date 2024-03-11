@@ -1,22 +1,38 @@
 <template>
-    <!-- some code condensed for display reasons -->
-    <FormulateForm
-      v-model="values"
-      @submit="addTask"
-    >
+  <div class="overlay" @click="closeForm">
+    <div class="container" @click.stop>
+      <div class="form">
+        <div class="head">
+          <div class="title"> Add a New Task </div>
+          <v-btn class="close-btn" @click="closeForm()">
+            <span class="material-symbols-outlined">
+            close
+            </span>
+          </v-btn>
+        </div>
 
-    <button class="exitAdd" v-on:click="closeForm">
-        Exit
-      </button>
+        <div class="body">
+          <div class="tasktitle"> Task Title: {{ title }} </div>
+          <input class="input" v-model="title" placeholder="Task Title" />
 
-      <h2>Add Task</h2>
-      <FormulateInput type="text" name="taskname" label="Task Name" validation="required|email" />
-      <FormulateInput type="text" name="taskdesc" label="Task Description" />
-      <FormulateInput type="date" name="taskddl" label="Task Deadline" />
-      <FormulateInput name="prio" type="select" label="Task Priority" validation="required" :options="{ lowprio: 'Low Priority', midprio: 'Mid Priority', highprio: 'High Priority'}" />
-      <FormulateInput type="submit" label="Add Task" />
-      <pre>{{ values }}</pre>
-    </FormulateForm>
+          <div class="taskdeets"> Task Details: </div>
+          <p style="white-space: pre-line;"> {{ details }} </p>
+          <textarea class="deets-input" v-model="details" placeholder="Task Details"></textarea>
+
+          <div class="taskprio">Task Priority {{ priolevel }}</div>
+          <select class="input" v-model="priolevel">
+            <option disabled value="">Please select one</option>
+            <option>High Priority</option>
+            <option>Mid Priority</option>
+            <option>Low Priority</option>
+          </select>
+
+          <div class="taskddl">Task Deadline {{ deadline }}</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </template>
   
 <script>
@@ -30,51 +46,88 @@
     },
     methods: {
       closeForm() {
-        this.$router.push('/');
+        this.$emit('close');
       }
     } 
 }
 </script>
 
 <style scoped>
-    FormulateForm {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        max-width: 500px; /* Adjust as needed */
-        margin: 0 auto; /* Centers the form */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
 
-    FormulateInput {
-        margin-bottom: 20px; /* Adds space between form elements */
-        width: 100%; /* Ensures inputs take up the full width of the form */
+    .container {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
-    FormulateInput[type="submit"] {
-        width: auto; /* Allows the submit button to adjust its width based on content */
-        background-color: #007bff; /* Example background color for the submit button */
-        color: white; /* Example text color for the submit button */
-        border: none; /* Removes default border */
-        padding: 10px 20px; /* Adds padding */
-        cursor: pointer; /* Changes cursor to pointer on hover */
-        transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    .form {
+
+      height: 500px;
+      width: 400px;
+      font-family: 'Inter';
+      font-size: medium;
+      border-radius: 15px;
     }
 
-    FormulateInput[type="submit"]:hover {
-        background-color: #0056b3; /* Darkens background color on hover */
+    .head {
+      margin: 20px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-around;
+      font-weight: bolder;
+      font-size: larger;
     }
 
-    .exitAdd {
-        position: absolute; 
-        top: 10px; 
-        right: 10px; 
-        background-color: #f44336; 
-        color: white; 
-        border: none; 
-        cursor: pointer; 
-        padding: 5px 10px; 
-        font-size: 16px;
+    .title{
+      flex: 7;
+    }
+
+    .close-btn {
+      text-align: center;
+      border-radius: 40px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+
+    .close-btn:hover{
+      color: rgba(0, 0, 0, 0.63);
+    }
+
+    .body {
+      margin: 30px;
+      margin-top: 20px;
+    }
+
+    .tasktitle, .taskdeets, .taskprio, .taskddl{
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .input{
+      margin-bottom: 20px;
+      width: 330px;
+      height: 30px;
+    } 
+
+    .deets-input {
+      margin-bottom: 20px;
+      position: static;
+      width: 330px;
+      height: 70px;
+      resize: none;
     }
 
 </style>

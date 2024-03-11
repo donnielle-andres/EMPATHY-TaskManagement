@@ -39,6 +39,13 @@
       <!-- RECOMMENDER SECTION -->
       <div class="right-section">
         <h3> Recommender </h3>
+
+        <div class="recommender">
+          <div class="recom-content">
+            recommender content
+          </div>
+        </div>
+
       </div>
 
     </div>
@@ -184,20 +191,35 @@
     padding-left: 10px;
   }
 
-  .right-section {
-    flex: 3; 
-    margin-left: 20px; 
-    border: 2px solid black; 
-    padding: 5px; 
-    height: 320px;
-    position: static;
-  }
 
   .todo-table {
     margin: 20px;
     margin-top: 10px;
     height: 260px;
     border: 2px solid black;
+  }
+
+
+  .right-section {
+    flex: 3; 
+    margin-left: 20px; 
+    padding: 5px; 
+    height: 320px;
+    position: static;
+  }
+
+  .recommender {
+    margin: 20px;
+    margin-top: 20px;
+    height: 250px;
+    border-radius: 10px;
+    background-color: #e7e7e7bb;
+  }
+
+  .recom-content{
+    font-family: 'Inter';
+    font-weight: 600;
+    padding: 30px;
   }
 
 

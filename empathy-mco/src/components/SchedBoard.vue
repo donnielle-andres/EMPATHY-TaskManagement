@@ -11,7 +11,9 @@
                 <div class="left-head">
                     <h3> Calendar </h3>
                     <div class="task-button">
-                        <v-btn class="add-task-btn" @click="addTask()">+ Add Task</v-btn>
+                        <v-btn class="add-task-btn" @click="addTask()">+ Add Task </v-btn>
+                        <task-form v-if="showAddTask" @close="showAddTask = false"></task-form>
+                        
                     </div>
                 </div>
 
@@ -35,12 +37,13 @@ export default {
     name: 'SchedBoard',
     methods: {
         addTask() {
-            this.$router.push({ name: 'AddTask' });
+            this.showAddTask = true;
         }
     },
     data() {
         return {
-        selectedDate: null,
+            showAddTask: false,
+            selectedDate: null,
         }
     }
 }
