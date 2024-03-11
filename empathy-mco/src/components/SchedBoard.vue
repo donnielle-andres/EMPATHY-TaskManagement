@@ -12,7 +12,7 @@
                     <h3> Calendar </h3>
                     <div class="task-button">
                         <v-btn class="add-task-btn" @click="addTask()">+ Add Task </v-btn>
-                        <task-form v-if="showAddTask" @close="showAddTask = false"></task-form>
+                        <task-form v-if="showAddTask" @close="showAddTask = false"  @taskAdded="showAddTask = false"></task-form>
                         
                     </div>
                 </div>

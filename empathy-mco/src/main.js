@@ -24,6 +24,7 @@ app.component('VCalendar', Calendar)
 app.component('VDatePicker', DatePicker)
 
 
+
 // Use the router
 app.use(router);
 

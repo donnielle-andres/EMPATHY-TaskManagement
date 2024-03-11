@@ -12,23 +12,46 @@
         </div>
 
         <div class="body">
-          <div class="tasktitle"> Task Title: {{ title }} </div>
-          <input class="input" v-model="title" placeholder="Task Title" />
+          <div class="tasktitle"> Task Title: </div>
+          <input class="title-input" v-model="title" placeholder="Task Title" />
 
           <div class="taskdeets"> Task Details: </div>
-          <p style="white-space: pre-line;"> {{ details }} </p>
+          <p style="white-space: pre-line;"> </p>
           <textarea class="deets-input" v-model="details" placeholder="Task Details"></textarea>
 
-          <div class="taskprio">Task Priority {{ priolevel }}</div>
-          <select class="input" v-model="priolevel">
-            <option disabled value="">Please select one</option>
-            <option>High Priority</option>
-            <option>Mid Priority</option>
-            <option>Low Priority</option>
-          </select>
+          <div class="prio-section">
+            <div class="taskprio">Task Priority </div>
+            <select class="prio-input" v-model="priolevel">
+              <option disabled value="">Please select one</option>
+              <option>High Priority</option>
+              <option>Mid Priority</option>
+              <option>Low Priority</option>
+            </select>
+          </div>
 
-          <div class="taskddl">Task Deadline {{ deadline }}</div>
+          <div class="ddl-section">
+            <div class="taskddl-left">Task Deadline
+            <v-btn class="add-task-btn" @click="addTask()"> Add Task </v-btn>
+            </div>
+
+            <div class="taskddl-right" @click="showDatePicker = showDatePicker">
+              {{ formattedDate }}
+              <v-date-picker
+                v-if="showDatePicker"
+                v-model="selectedDate"
+                :portrait="true"
+              ></v-date-picker>
+            </div>
+          </div>
+
+          
         </div>
+
+        <!--
+        <div class="button">
+          <v-btn class="add-task-btn" @click="addTask()"> Add Task </v-btn>
+        </div>
+        -->
 
       </div>
     </div>
@@ -36,21 +59,46 @@
 </template>
   
 <script>
-  export default { 
-    name: 'AddTask',
-    data () { 
-        return { 
-            values: {}, 
-            addTask: () => alert('Task Added') 
-        } 
-    },
-    methods: {
+  export default {
+  name: 'AddTask',
+  data() {
+      return {
+        selectedDate: null,
+        showDatePicker: true,
+      };
+  },
+  created() {
+      this.selectedDate = this.getToday();
+  },
+  computed: {
+    formattedDate() {
+      if (!this.selectedDate) return '';
+      const date = new Date(this.selectedDate);
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
+    }
+  },
+  methods: {
       closeForm() {
         this.$emit('close');
+      },
+      getToday() {
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        const yyyy = today.getFullYear();
+
+        return `${yyyy}-${mm}-${dd}`;
+      },
+      addTask() {
+        // Add code to push thru the db
+        this.$router.push({ name: 'SchedBoard' }); // should refresh to the schedboard
+        this.$emit('taskAdded'); // Emit the custom event
       }
-    } 
-}
+  }
+  };
 </script>
+
 
 <style scoped>
     .overlay {
@@ -73,9 +121,8 @@
     }
 
     .form {
-
-      height: 500px;
-      width: 400px;
+      height: 570px;
+      width: 600px;
       font-family: 'Inter';
       font-size: medium;
       border-radius: 15px;
@@ -108,26 +155,76 @@
 
     .body {
       margin: 30px;
-      margin-top: 20px;
+      margin-top: 10px;
+      position: relative; 
     }
 
-    .tasktitle, .taskdeets, .taskprio, .taskddl{
+    .tasktitle, .taskdeets, .taskprio, .taskddl-left{
       font-weight: bold;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
 
-    .input{
+    .title-input{
       margin-bottom: 20px;
-      width: 330px;
+      width: 535px;
       height: 30px;
     } 
 
     .deets-input {
       margin-bottom: 20px;
       position: static;
-      width: 330px;
+      width: 535px;
       height: 70px;
       resize: none;
     }
+
+    .prio-section {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 20px;
+      align-content: center;
+    }
+
+    .prio-input {
+      width: 396px;
+    }
+
+    .add-task-btn {
+      margin-top: 220px;
+      height: 30px;
+      width: 120px;
+      outline: 2px solid black;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 14px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .add-task-btn:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+
+    .ddl-section {
+      display: flex;
+      gap: 18px;
+    }
+
+    .taskddl-right {
+      font-size: medium;
+      cursor: pointer;
+      display: flex; 
+      align-items: top; 
+      gap: 30px; 
+    }
+    
+
+    .ddl-input{
+      width: 200px;
+    }
+
 
 </style>
