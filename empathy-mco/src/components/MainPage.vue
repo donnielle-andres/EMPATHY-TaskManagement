@@ -22,8 +22,6 @@
       <div class="task-cards">
         <task-card v-for="(task, index) in tasks" :key="index" :task="task" />
       </div>
-
-      <SchedBoard @tasks-updated="updateEvents" />
       
     </div>
 

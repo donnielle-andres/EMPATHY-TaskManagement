@@ -1,49 +1,58 @@
 <template>
     <div class="settings-page">
-        <h2 class="title">Settings</h2>
+        <h2 class="title">User Recommender Settings</h2>
+        
         <form class="settings-form" @submit.prevent="updateSettings">
-            <div>
-                <label for="fullName">Full Name:</label>
-                <input type="text" id="fullName" v-model="fullName" />
+
+            <div class="name-section">
+                <h3>Full Name:</h3>
+                <input class="name-input" type="text" id="fullName" v-model="fullName" />
             </div>
+
             <hr>
+
             <h3>User Preference</h3>
-            <div style="margin-left:1vh;">
-                <div>
+            <div class="pref-info">
+
+                <div class="prio-section">
                     <label for="task-category-prioritization">Task Category Prioritization:</label>
-                    <div>
+                    <div class="prio-input">
                         <div v-for="(priority, index) in taskPriorities" :key="index" class="task-priority-container">
                             <h4>{{ priority.number }}</h4>
                             <input type="text" :id="`taskPriority-${priority.number}`" v-model="priority.value" />
                         </div>
-                        <div>
+
+                        <div class="prio-btn">
                             <button @click="addTaskPriority">Add Task Priority</button>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <label for="daily-schedule">Daily Schedule:</label>
-                    <div class="time-container" style="padding-left:4vh;">
+
+                <div class="daily-sched-section">
+                    <label for="daily-schedule">Available Daily Schedule:</label>
+                    <div class="dailytime-container">
                         <input type="text" id="dailyTimeInputBefore" v-model="dailyTimeInputBefore" />
                         <h4>-</h4>
                         <input type="text" id="dailyTimeInputAfter" v-model="dailyTimeInputAfter" />
                     </div>
                 </div>
-                <div>
+
+                <div class="busy-section">
                     <label for="busy-timeslots">Busy Timeslots:</label>
-                    <div>
-                        <div v-for="(timeslot, index) in timeslots" :key="index" class="time-container">
-                            <h4>{{ timeslot.number }}</h4>
+                    <div class="busy-input">
+                        <div v-for="(timeslot, index) in timeslots" :key="index" class="busytime-container">
+                            <label>{{ timeslot.number }}</label>
                             <input type="text" :id="`busy-timeslots-input-before-${timeslot.number}`" v-model="timeslot.before" />
                             <h4>-</h4>
                             <input type="text" :id="`busy-timeslots-input-after-${timeslot.number}`" v-model="timeslot.after" />
                         </div>
-                        <div>
+                        <div class="busy-btn">
                             <button @click="addTimeslot">Add Timeslot</button>
                         </div>
                     </div>
                 </div>
-                <div>
+
+                <div class="save-btn">
                     <button type="submit">Save Settings</button>
                 </div>
             </div>
@@ -52,7 +61,7 @@
 </template>
 
 <script>
-    import { ref } from 'vue';
+import { ref } from 'vue';
 
     export default {
     setup() {
@@ -94,20 +103,47 @@
 
 <style scoped>
     .settings-page {
-        max-width: 100vh;
-        margin: 0 auto;
-        padding: 20px;
-        margin-top:5vh;
-        background-color: #efefef;
-        border-radius: 2vh;
+        position: relative; 
+        flex-grow: 1; 
+        height: 99vh; 
+        display: flex; 
+        flex-direction: column; 
+        justify-content: flex-start; /* Center children vertically */
+        align-items: center; /* Center children horizontally */
+        font-family: 'Inter';
     }
 
     .title {
-        text-align: center;
+        font-weight: bolder;
+        font-size: 25px;
+        display: flex; 
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center; 
+        width: 100%;
+        height: 100px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        padding: 25px;
     }
 
-    form div {
+    .settings-form{
+        width: 700px;
+    }
+
+    h3{
         margin-bottom: 10px;
+    }
+
+    .name-input{
+        margin-left: 7px;
+        margin-right: 7px;
+        width: 680px;
+    }
+
+    hr{
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
 
     label {
@@ -120,55 +156,90 @@
 
     .task-priority-container {
         display: flex;
-        align-items: center; /* This ensures vertical centering of all items */
+        align-items: center; 
         padding:0;
     }
 
     .task-priority-container label {
-        margin-right: 10px; /* Add some space between the label and the h4 */
+        margin-right: 10px;
     }
 
-    h4 {
-        margin-left: 1vh;
-        margin-right: 1vh; /* Add some space between the h4 and the input */
-        height: 4vh;
-        width:2vh;
-    }
-
-    /* Ensure the input takes up the full height of the container */
     .task-priority-container input {
         width: 50vh;
-        height: 4vh;
+        height: 5vh;
     }
 
-    .time-container {
+    .prio-input{
+        margin-left: 10px;
+    }
+
+    .prio-btn {
+        margin-bottom: 20px;
+    }
+
+
+    /** AVAILABLE DAILY SCHED */
+    h4 {
+        margin-left: 1vh;
+        margin-right: 1vh;
+        height: 4vh;
+        width: 2vh;
+    }
+
+    .dailytime-container {
         display: flex;
-        align-items: center; /* This ensures vertical centering of all items */
-        padding:0;
+        align-items: center; 
+        padding-left:38px;
+        width: 687px;
     }
 
-    .time-container input {
-        width: 23vh;
-        height: 4vh;
+    /** BUSY TIMESLOTS */
+    .busytime-container {
+        display: flex;
+        align-items: center; 
+        padding-left: 12px;
+        width: 687px;
+    }
+
+    .busytime-container label {
+        margin-right: 11px;
+    }
+
+    .busy-btn{
+        margin-left: 10px;
     }
 
     input {
         width: 100%;
         padding: 10px;
         margin-bottom: 10px;
+        height: 5vh;
     }
 
     button {
-        padding: 10px 20px;
-        background-color: #dedede;
-        color: black;
-        border: none;
+        height: 30px;
+        width: 150px;
+        font-size: 12px;
+        margin-top: 10px;
+        outline: 1 solid black;
+        border-radius: 5px;
         cursor: pointer;
-        border-radius: 1vh;
         font-weight: bold;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     }
 
     button:hover {
-        background-color: #d0d0d0;
+        background-color: rgba(0, 0, 0, 0.1); 
+    }
+
+    .save-btn {
+        margin-top: 10px;
+        display: flex; 
+        justify-content: center; 
+    }
+
+    .save-btn button{
+        height: 40px;
+        width: 150px;
     }
 </style>
