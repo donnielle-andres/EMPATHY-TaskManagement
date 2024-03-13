@@ -13,7 +13,7 @@
 
       <!-- Task Label & Button -->
       <div class="task-head"> 
-        <h3> Today's Tasks </h3>
+        <h3> Tasks to do today! </h3>
         <v-btn class="task-button" @click="addTask()" > + Add Task</v-btn>
         <task-form v-if="showAddTask" @close="showAddTask = false"  @taskAdded="showAddTask = false"></task-form>
       </div>
@@ -22,6 +22,8 @@
       <div class="task-cards">
         <task-card v-for="(task, index) in tasks" :key="index" :task="task" />
       </div>
+
+      <SchedBoard @tasks-updated="updateEvents" />
       
     </div>
 
@@ -80,7 +82,7 @@
           currentDay: '', 
           tasks: [
             { title: 'Task 1', description: 'description 1', priority: 'High Priority', deadline: '03/10/2024'},
-            { title: 'Task 2', description: 'description 2', priority: 'High Priority', deadline: '04/10/2024' }
+            { title: 'Task 2', description: 'description 2', priority: 'High Priority', deadline: '04/10/2024' },
           ],
           header: [
             { text: 'Title', value: 'title' },
@@ -113,7 +115,9 @@
         this.currentDay = `${formattedDate}, ${dayOfWeek}`;
       },
       addTask() {
-            this.showAddTask = true;
+        this.showAddTask = true;
+        this.tasks.push({ id: this.tasks.length + 1, title: 'New Task', description: 'New description', priority: 'Medium Priority', deadline: '2024-05-10T15:00:00' });
+        this.$emit('tasks-updated', this.tasks);
       }
     },
 

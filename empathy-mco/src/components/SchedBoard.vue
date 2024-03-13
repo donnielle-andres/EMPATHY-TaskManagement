@@ -1,16 +1,15 @@
 <template>
     <div class="container">
         <div class="head">
-            Daily Recommender Schedule  <!-- <p>{{ dailySchedule }}</p> -->
+            Daily Recommender Schedule  
+            <h6> {{ formattedDate }}  </h6>
         </div>
         
         <div class="board">
             <div class="daily-sched">
                 <!-- Daily Schedule View Only -->
-                <!-- <DayPilotCalendar id="dp" :config="config" ref="calendarRef" />-->
-                <ejs-schedule :eventSettings="eventSettings"></ejs-schedule>
+                 <DayPilotCalendar class="daypilotcal" id="dp" :config="config" ref="calendar" />
                 
-
             </div>
 
         </div>
@@ -19,43 +18,56 @@
 </template>
 
 <script>
-import { Day, Week, WorkWeek, Month, Agenda } from '@syncfusion/ej2-vue-schedule';
-
+import {DayPilot} from '@daypilot/daypilot-lite-vue'
 
 export default {
     name: 'SchedBoard',
-    methods: {
-        addTask() {
-            this.showAddTask = true;
-        }
-    },
-    data() {
-        return {
-            showAddTask: false,
-            selectedDate: new Date(2024, 3, 12),
-            eventSettings: {
-                dataSource: [{
-                    /** Add connection from the db */
-                    Id: 1,
-                    Subject: 'Meeting',
-                    StartTime: new Date(2018, 1, 15, 10, 0),
-                    EndTime: new Date(2018, 1, 15, 12, 30)
-                }]
-            }
-        };
-    },
+    props: ['tasks'],
     computed: {
         formattedDate() {
-            if (!this.selectedDate) return '';
-            const date = new Date(this.selectedDate);
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return date.toLocaleDateString('en-US', options);
+            const date = new Date();
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const weekdayOptions = { weekday: 'long' };
+            const formattedDatePart = date.toLocaleDateString('en-US', dateOptions);
+            const weekday = date.toLocaleDateString('en-US', weekdayOptions);
+            return `${formattedDatePart} | ${weekday}`;
+        },
+        calendar() {
+            return this.$refs.calendar.control;
         }
     },
-    provide: {
-        schedule: [Day, Week, WorkWeek, Month, Agenda]
+    data: function() {
+        return {
+            config: {
+                viewType: "Day",
+            },
+        }
+    },
+    methods: {
+        loadEvents() {
+        // Dummy Data - Put DB Connection here!!!
+        // Use Military Time
+        const data = [
+            {
+            id: 1,
+            start: DayPilot.Date.today().addHours(7),
+            end: DayPilot.Date.today().addHours(10),
+            text: "Task 1"
+            },
+            {
+            id: 2,
+            start: DayPilot.Date.today().addHours(13),
+            end: DayPilot.Date.today().addHours(16),
+            text: "Task 2"
+            }
+        ];
+        this.calendar.update({events: data});
+        },
+    },
+    mounted() {
+        this.loadEvents();
     }
-
+    
 }
 </script>
 
@@ -63,7 +75,6 @@ export default {
     .container {
         position: relative; 
         flex-grow: 1; 
-        margin-top: 5px;
         height: 99vh; 
         display: flex; 
         flex-direction: column; 
@@ -80,8 +91,14 @@ export default {
         justify-content: center; 
         align-items: center; 
         width: 100%;
-        height: 110px;
+        height: 100px;
+        margin-top: 10px;
         padding: 25px;
+    }
+
+    h6 {
+        margin-top: 10px;
+        font-size: medium;
     }
 
     .board {
@@ -96,7 +113,7 @@ export default {
         width: 1300px;
         position: static;
     }
-    
+
     
 </style>
 
