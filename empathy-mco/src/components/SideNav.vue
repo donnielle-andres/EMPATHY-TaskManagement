@@ -46,7 +46,7 @@ export default {
         },
 
         gotoSettings() {
-        // Handle button click event here  this.$router.push({ name: 'Settings' });
+            this.$router.push({ name: 'SettingsPage' });
         }
     }
 }

@@ -102,7 +102,7 @@
     methods: {
       getCurrentTime() {
         const now = new Date();
-        this.currentTime = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+        this.currentTime = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'});
       },
       getCurrentDay() {
         const now = new Date();
@@ -154,8 +154,7 @@
   h2, h5 {
     margin: 2px; 
   }
-
-  
+ 
   /** Task Section Style */
   h3 {
     font-size: larger;

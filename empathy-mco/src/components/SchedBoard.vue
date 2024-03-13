@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { Day } from '@syncfusion/ej2-vue-schedule';
+import { Day, Week, WorkWeek, Month, Agenda } from '@syncfusion/ej2-vue-schedule';
 
 
 export default {
@@ -36,6 +36,10 @@ export default {
             eventSettings: {
                 dataSource: [{
                     /** Add connection from the db */
+                    Id: 1,
+                    Subject: 'Meeting',
+                    StartTime: new Date(2018, 1, 15, 10, 0),
+                    EndTime: new Date(2018, 1, 15, 12, 30)
                 }]
             }
         };
@@ -49,7 +53,7 @@ export default {
         }
     },
     provide: {
-        schedule: [Day]
+        schedule: [Day, Week, WorkWeek, Month, Agenda]
     }
 
 }
