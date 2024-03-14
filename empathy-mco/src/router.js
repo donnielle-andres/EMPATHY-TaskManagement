@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainPage from './components/MainPage.vue'
 import SchedBoard from './components/SchedBoard.vue'
 import SettingsPage from './components/SettingsPage.vue'
+import TestPage from './components/Test.vue'
 
 
 
@@ -21,6 +22,11 @@ const routes = [
         path: '/settings',
         name: 'SettingsPage',
         component: SettingsPage
+    },
+    {
+        path: '/test',
+        name: 'test',
+        component: TestPage
     }
 ]
 
