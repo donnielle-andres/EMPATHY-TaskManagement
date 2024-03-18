@@ -19,6 +19,10 @@
           <p style="white-space: pre-line;"> </p>
           <textarea class="deets-input" v-model="details" placeholder="Task Details"></textarea>
 
+          <div class="taskdur"> Task Daily Duration: </div>
+          <p style="white-space: pre-line;"> </p>
+          <textarea class="dur-input" v-model="duration" placeholder="Task Daily Duration (In Minutes)"></textarea>
+
           <div class="prio-section">
             <div class="taskprio">Task Priority </div>
             <select class="prio-input" v-model="priolevel">
@@ -59,44 +63,8 @@
 </template>
   
 <script>
-  export default {
-  name: 'AddTask',
-  data() {
-      return {
-        selectedDate: null,
-        showDatePicker: true,
-      };
-  },
-  created() {
-      this.selectedDate = this.getToday();
-  },
-  computed: {
-    formattedDate() {
-      if (!this.selectedDate) return '';
-      const date = new Date(this.selectedDate);
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      return date.toLocaleDateString('en-US', options);
-    }
-  },
-  methods: {
-      closeForm() {
-        this.$emit('close');
-      },
-      getToday() {
-        const today = new Date();
-        const dd = String(today.getDate()).padStart(2, '0');
-        const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-        const yyyy = today.getFullYear();
-
-        return `${yyyy}-${mm}-${dd}`;
-      },
-      addTask() {
-        // Add code to push thru the db
-        // this.$router.push({ name: 'MainPage' }); // should refresh to the schedboard
-        this.$emit('taskAdded'); // Emit the custom event
-      }
-  }
-  };
+  import AddTask from '../util/AddTask.js'
+  export default AddTask
 </script>
 
 
@@ -121,7 +89,7 @@
     }
 
     .form {
-      height: 570px;
+      height: 650px;
       width: 600px;
       font-family: 'Inter';
       font-size: medium;
@@ -159,7 +127,7 @@
       position: relative; 
     }
 
-    .tasktitle, .taskdeets, .taskprio, .taskddl-left{
+    .tasktitle, .taskdeets, .taskprio, .taskdur, .taskddl-left{
       font-weight: bold;
       margin-bottom: 5px;
     }
@@ -175,6 +143,14 @@
       position: static;
       width: 535px;
       height: 70px;
+      resize: none;
+    }
+
+    .dur-input {
+      margin-bottom: 20px;
+      position: static;
+      width: 267px;
+      height: 30px;
       resize: none;
     }
 

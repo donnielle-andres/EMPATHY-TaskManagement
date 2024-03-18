@@ -1,18 +1,13 @@
 import { firebase, db } from './firebase.js'
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs} from "firebase/firestore";
+import { getTasks } from './DatabaseFunctions.js'
 export default {
     name: "TestPage",
 
-    created() {
+    async created() {
         console.log("Hellow")
-        console.log(firebase)
-        try {
-            const reference = addDoc(collection(db, "Test"), {
-                name: "Sam2"
-            })
-        } catch(e) {
-            console.log(e)
-        }
+
+        const tasks = await getTasks()
     },
 
     data(){
@@ -34,10 +29,8 @@ export default {
     },
 
     methods: {
-        test() {
-            db.ref('/users/').push({
-                name: "test"
-            })
+        async test() {
+            
         },
 
         poop() {
