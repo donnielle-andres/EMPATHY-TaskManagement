@@ -41,7 +41,7 @@
                     <label for="busy-timeslots">Busy Timeslots:</label>
                     <div class="busy-input">
                         <div v-for="(timeslot, index) in timeslots" :key="index" class="busytime-container">
-                            <label>{{ timeslot.number }}</label>
+                            <h4>{{ timeslot.number }}</h4>
                             <input type="text" :id="`busy-timeslots-input-before-${timeslot.number}`" v-model="timeslot.before" />
                             <h4>-</h4>
                             <input type="text" :id="`busy-timeslots-input-after-${timeslot.number}`" v-model="timeslot.after" />
@@ -78,7 +78,7 @@ import { ref } from 'vue';
         };
 
         const addTimeslot = () => {
-            const number = timeslots.value.length + 1; // Start from 2 and increment
+            const number = timeslots.value.length + 1; // Start from 1 and increment
             timeslots.value.push({ number, before: '', after: '' });
         };
 
@@ -180,7 +180,7 @@ import { ref } from 'vue';
 
     /** AVAILABLE DAILY SCHED */
     h4 {
-        margin-left: 1vh;
+        margin-left: 2vh;
         margin-right: 1vh;
         height: 4vh;
         width: 2vh;
@@ -189,7 +189,7 @@ import { ref } from 'vue';
     .dailytime-container {
         display: flex;
         align-items: center; 
-        padding-left:38px;
+        padding-left:6.5vh;
         width: 687px;
     }
 
@@ -209,8 +209,15 @@ import { ref } from 'vue';
         margin-left: 10px;
     }
 
+    .label-number{
+        width: 3vh;
+        max-width: 3vh;
+        height: 4vh;
+        margin-right: 10px;
+    }
+
     input {
-        width: 100%;
+        width: 10vh;
         padding: 10px;
         margin-bottom: 10px;
         height: 5vh;
