@@ -1,6 +1,6 @@
 import { app, db } from './firebase.js'
-import { collection, addDoc } from "firebase/firestore";
-import{ calculatePriority } from './DatabaseFunctions.js';
+import { collection, addDoc, updateDoc } from "firebase/firestore";
+import{ calculatePriority, updateTask } from './DatabaseFunctions.js';
 
 export default {
     name: 'AddTask',
@@ -44,14 +44,19 @@ export default {
           const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
           try {
-              const reference = await addDoc(collection(db, "Tasks"), {
-                  Title: this.title,
-                  Description: this.details,
-                  Duration: this.duration,
-                  Priority: this.priolevel,
-                  Priority_Value: prioVal,
-                  Deadline: date.toLocaleDateString('en-CA', options)
-              })
+              let tempTask = {
+                Title: this.title,
+                Description: this.details,
+                Duration: this.duration,
+                Priority: this.priolevel,
+                Priority_Value: prioVal,
+                Deadline: date.toLocaleDateString('en-CA', options)
+              }
+
+              const reference = await addDoc(collection(db, "Tasks"), tempTask)
+
+              tempTask["Description"] = "this has been updated"
+              const uReference = await updateTask(reference.id.toString, tempTask)
           } catch(e) {
               console.log(e)
           }

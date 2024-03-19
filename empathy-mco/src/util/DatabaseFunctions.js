@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs} from "firebase/firestore";
+import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from './firebase.js'
 
 function calculatePriority(dl, prio) {
@@ -58,4 +58,26 @@ async function getTasks() {
     return tasks
 }
 
-export { calculatePriority, getTasks}
+async function updateTask(id, updatedTask) {
+    const prioVal = calculatePriority(this.selectedDate, this.priolevel)
+    const date = new Date(updatedTask.selectedDate);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+
+    const taskRef = doc(db, 'Tasks', id)
+    const reference = await updateDoc(taskRef, {
+        Title: updatedTask.title,
+        Description: updatedTask.details,
+        Duration: updatedTask.duration,
+        Priority: updatedTask.priolevel,
+        Priority_Value: prioVal,
+        Deadline: date.toLocaleDateString('en-CA', options)
+    })
+
+    return reference
+}
+
+async function deleteTask(id) {
+    await deleteDoc(doc(db, "Tasks", id))
+}
+
+export { calculatePriority, getTasks, updateTask, deleteTask}
