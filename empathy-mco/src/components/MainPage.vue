@@ -53,11 +53,17 @@
 
       <!-- RECOMMENDER SECTION -->
       <div class="right-section">
-        <h3> Recommender </h3>
+        <h3> Quote </h3>
 
-        <div class="recommender">
-          <div class="recom-content">
-            recommender content
+        <div class="quote">
+          <div class="quote-content">
+            <h2>
+              {{ quote }}
+            </h2>
+            <br>
+            <h4>
+              {{ author }}
+            </h4>
           </div>
         </div>
 
@@ -71,6 +77,7 @@
 
 <script>
   import { getTasks } from '../util/DatabaseFunctions.js'
+  import axios from 'axios';
   export default {
     name: 'MainPage',
     data() {
@@ -89,6 +96,7 @@
             { text: 'Priority', value: 'priority' },
             { text: 'Deadline', value: 'deadline' },
           ],
+          quote: '',
       };
     },
 
@@ -98,6 +106,7 @@
       setInterval(() => {
         this.getCurrentTime();
       }, 1000); // Update time every second
+      this.fetchQuoteContent();
     },
 
     methods: {
@@ -131,7 +140,20 @@
           console.log(tsa)
           return dateA.getTime() - dateB.getTime() 
         })
-      }
+      },
+      async fetchQuoteContent() {
+        const category = 'success';
+        try {
+          const response = await axios.get('https://api.api-ninjas.com/v1/quotes?category=' + category, {
+            headers: { 'X-Api-Key': 'k22YCJcdYiumLcLaipsCwA==cHfmjpZMFvKRwWFg' }
+          });
+          console.log('response.data.text:', response.data);
+          this.quote = response.data[0].quote;
+          this.author = response.data[0].author;
+        } catch (error) {
+          console.error('Failed to fetch quote content:', error);
+        }
+      },
     },
 
     async created() {
@@ -156,6 +178,7 @@
             { field: 'quantity', header: 'Quantity' }
         ];
     },
+    
   };
 </script>
 
@@ -268,15 +291,16 @@
     position: static;
   }
 
-  .recommender {
+  .quote {
     margin: 20px;
     margin-top: 20px;
-    height: 250px;
+    height: wrap-content;
+    width: 20vw;
     border-radius: 10px;
     background-color: #e7e7e7bb;
   }
 
-  .recom-content{
+  .quote-content{
     font-family: 'Inter';
     font-weight: 600;
     padding: 30px;
