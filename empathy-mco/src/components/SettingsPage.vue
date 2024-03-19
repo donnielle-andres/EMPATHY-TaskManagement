@@ -20,9 +20,9 @@
                         <div v-for="(priority, index) in taskPriorities" :key="index" class="task-priority-container">
                             <h4>{{ priority.number }}</h4>
                             <input type="text" :id="`taskPriority-${priority.number}`" v-model="priority.value" />
-                            <span class="material-symbols-outlined" @click="deleteTask()"> delete </span>
+                            <span class="material-symbols-outlined delete-button" @click="deleteTaskPriority(index)"> delete </span>
                         </div>
-
+                        
                         <div class="prio-btn">
                             <button @click="addTaskPriority">Add Task Priority</button>
                         </div>
@@ -46,6 +46,7 @@
                             <input type="text" :id="`busy-timeslots-input-before-${timeslot.number}`" v-model="timeslot.before" />
                             <h4>-</h4>
                             <input type="text" :id="`busy-timeslots-input-after-${timeslot.number}`" v-model="timeslot.after" />
+                            <span class="material-symbols-outlined delete-button" @click="deleteTimeslot(index)"> delete </span>
                         </div>
                         <div class="busy-btn">
                             <button @click="addTimeslot">Add Timeslot</button>
@@ -83,16 +84,32 @@ import { ref } from 'vue';
             timeslots.value.push({ number, before: '', after: '' });
         };
 
+        const deleteTimeslot = (index) => {
+            timeslots.value.splice(index, 1);
+            timeslots.value.forEach((timeslot, newIndex) => {
+                timeslot.number = newIndex + 1; 
+            });
+        };
+
         const addTaskPriority = () => {
             const number = taskPriorities.value.length + 1; // Start from 1 and increment
             taskPriorities.value.push({ number, value: '' });
         };
 
+        const deleteTaskPriority = (index) => {
+            taskPriorities.value.splice(index, 1);
+            taskPriorities.value.forEach((taskPriority, newIndex) => {
+                taskPriority.number = newIndex + 1; 
+            });
+        };
+
         return {
         timeslots,
         addTimeslot,
+        deleteTimeslot,
         taskPriorities,
         addTaskPriority,
+        deleteTaskPriority,
         fullName,
         dailyTimeInputBefore,
         dailyTimeInputAfter,
@@ -251,6 +268,17 @@ import { ref } from 'vue';
         cursor: pointer;
         font-weight: bold;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .delete-button {
+        height: 5vh;
+        cursor: pointer;
+        color: rgba(255, 0, 0, 0.363);
+    }
+
+    .delete-button:hover {
+        color: rgba(255, 0, 0, 0.63);
+        cursor: pointer;
     }
 
     button:hover {
