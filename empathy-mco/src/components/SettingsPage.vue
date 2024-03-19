@@ -41,7 +41,7 @@
                     <label for="busy-timeslots">Busy Timeslots:</label>
                     <div class="busy-input">
                         <div v-for="(timeslot, index) in timeslots" :key="index" class="busytime-container">
-                            <h4>{{ timeslot.number }}</h4>
+                            <h4 class="busytime-index">{{ timeslot.number }}</h4>
                             <input type="text" :id="`busy-timeslots-input-before-${timeslot.number}`" v-model="timeslot.before" />
                             <h4>-</h4>
                             <input type="text" :id="`busy-timeslots-input-after-${timeslot.number}`" v-model="timeslot.after" />
@@ -180,7 +180,7 @@ import { ref } from 'vue';
 
     /** AVAILABLE DAILY SCHED */
     h4 {
-        margin-left: 2vh;
+        margin-left: 1vh;
         margin-right: 1vh;
         height: 4vh;
         width: 2vh;
@@ -189,7 +189,11 @@ import { ref } from 'vue';
     .dailytime-container {
         display: flex;
         align-items: center; 
-        padding-left:6.5vh;
+        padding-left: 41px;
+        width: 687px;
+    }
+
+    .dailytime-container input{
         width: 687px;
     }
 
@@ -197,17 +201,30 @@ import { ref } from 'vue';
     .busytime-container {
         display: flex;
         align-items: center; 
-        padding-left: 12px;
-        width: 687px;
+        width: 677px;
+        margin-left: 10px;
+        
     }
 
     .busytime-container label {
-        margin-right: 11px;
+        margin-right: 10px;
     }
+
+    .busytime-container input {
+        width: 675px;
+        height: 5vh;
+
+    }
+
+    .busytime-index{
+        margin-right: 15.5px;
+    }
+
 
     .busy-btn{
         margin-left: 10px;
     }
+
 
     .label-number{
         width: 3vh;
@@ -240,7 +257,7 @@ import { ref } from 'vue';
     }
 
     .save-btn {
-        margin-top: 10px;
+        margin-top: 30px;
         display: flex; 
         justify-content: center; 
     }

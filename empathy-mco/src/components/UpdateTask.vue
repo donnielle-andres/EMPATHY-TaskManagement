@@ -3,7 +3,7 @@
     <div class="container" @click.stop>
       <div class="form">
         <div class="head">
-          <div class="title"> Add a New Task </div>
+          <div class="title"> Update Task </div>
           <v-btn class="close-btn" @click="closeForm()">
             <span class="material-symbols-outlined">
             close
@@ -58,7 +58,10 @@
 
           <div class="ddl-section">
             <div class="taskddl-left">Task Deadline
-            <v-btn class="add-task-btn" @click="addTask()"> Add Task </v-btn>
+              <div class="button-section">
+                <v-btn class="update-task-btn" @click="updateTask()"> Save </v-btn>
+                <span class="material-symbols-outlined" @click="deleteTask()"> delete </span>
+              </div>
             </div>
 
             <div class="taskddl-right" @click="showDatePicker = showDatePicker">
@@ -67,11 +70,9 @@
                 v-if="showDatePicker"
                 v-model="selectedDate"
                 :portrait="true"
-                class="date-picker"
               ></v-date-picker>
             </div>
           </div>
-
           
         </div>
 
@@ -81,8 +82,8 @@
 </template>
   
 <script>
-  import AddTask from '../util/AddTask.js'
-  export default AddTask
+  import UpdateTask from '../util/UpdateTask.js' /** Change the content of the update task */
+  export default UpdateTask
 </script>
 
 
@@ -215,10 +216,9 @@
       width: 340px;
     }
 
-    .add-task-btn {
-      margin-top: 220px;
+    .update-task-btn {
       height: 30px;
-      width: 120px;
+      width: 110px;
       outline: 2px solid black;
       border-radius: 5px;
       display: flex;
@@ -229,26 +229,45 @@
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
     }
 
-    .add-task-btn:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-        cursor: pointer;
+    .update-task-btn:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+      cursor: pointer;
     }
 
     .ddl-section {
       display: flex;
-      
     }
 
+    .taskddl-left{
+      flex: 3;
+    }
+
+    .button-section {
+      display: flex;
+      margin-top: 220px;
+      gap: 15px;
+    }
+
+    .button-section span{
+      color: rgba(255, 0, 0, 0.363);
+      cursor: pointer;
+    }
+
+    .button-section span:hover{
+      color: rgba(255, 0, 0, 0.63);
+      cursor: pointer;
+    }
 
     .taskddl-right {
-      font-size: medium;
+      flex: 8;
+      margin-left: 10px;
+      font-size: 14px;
       cursor: pointer;
       display: flex; 
       align-items: top; 
-      margin-left: 32px;
-      gap: 8px;
+      margin-left: 25px;
+      gap: 8px; 
     }
-
     
     .ddl-input{
       width: 200px;

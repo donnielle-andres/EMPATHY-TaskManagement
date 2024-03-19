@@ -109,7 +109,7 @@ export default {
     .daily-sched {
         margin-left: 60px;
         margin-right: 50px;
-        height: 570px;
+        height: 600px;
         width: 1300px;
         position: static;
     }
