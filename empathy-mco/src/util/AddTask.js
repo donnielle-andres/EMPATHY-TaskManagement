@@ -48,8 +48,10 @@ export default {
                   Title: this.title,
                   Description: this.details,
                   Duration: this.duration,
+                  Category: this.category,
                   Priority: this.priolevel,
                   Priority_Value: prioVal,
+                  Status: this.status,
                   Deadline: date.toLocaleDateString('en-CA', options)
               })
           } catch(e) {

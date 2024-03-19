@@ -20,6 +20,7 @@
                         <div v-for="(priority, index) in taskPriorities" :key="index" class="task-priority-container">
                             <h4>{{ priority.number }}</h4>
                             <input type="text" :id="`taskPriority-${priority.number}`" v-model="priority.value" />
+                            <span class="material-symbols-outlined" @click="deleteTask()"> delete </span>
                         </div>
 
                         <div class="prio-btn">

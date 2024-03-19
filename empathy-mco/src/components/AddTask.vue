@@ -27,7 +27,7 @@
 
           <div class="categ-section">
             <div class="taskcateg">Task Category </div>
-            <select class="categ-input" v-model="categlevel">
+            <select class="categ-input" v-model="category">
               <option disabled value="">Please select one</option>
               <option>Category 1</option>
               <option>Category 2</option>
@@ -48,7 +48,7 @@
 
           <div class="status-section">
             <div class="taskstatus">Task Status </div>
-            <select class="status-input" v-model="priolevel">
+            <select class="status-input" v-model="status">
               <option disabled value="">Please select one</option>
               <option>Not Started</option>
               <option>In Progress</option>

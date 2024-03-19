@@ -136,6 +136,9 @@
       addTask() {
         this.showAddTask = true;
       },
+      viewTask(task){
+        this.showUpdateTaskForm = true;
+      },
       async addTaskFinish() {
         this.showAddTask = false;
         this.allTasks = await getTasks()
@@ -151,7 +154,20 @@
           console.log(tsa)
           return dateA.getTime() - dateB.getTime() 
         })
-      }
+      },
+      async fetchQuoteContent() {
+        const category = 'success';
+        try {
+          const response = await axios.get('https://api.api-ninjas.com/v1/quotes?category=' + category, {
+            headers: { 'X-Api-Key': 'k22YCJcdYiumLcLaipsCwA==cHfmjpZMFvKRwWFg' }
+          });
+          console.log('response.data.text:', response.data);
+          this.quote = response.data[0].quote;
+          this.author = response.data[0].author;
+        } catch (error) {
+          console.error('Failed to fetch quote content:', error);
+        }
+      },
     },
 
     async created() {
