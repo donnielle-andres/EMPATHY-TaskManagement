@@ -32,22 +32,30 @@
 
           <!-- To Do Table -->
           <div class="todo-table"> 
-          <table>
-            <thead>
-              <tr>
-                <th v-for="(column, index) in header" :key="index">{{ column.text }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(task, index) in allTasks" :key="index">
-                <td>{{ task.title }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.priority }}</td>
-                <td>{{ task.deadline }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+            <table>
+                <thead>
+                  <tr>
+                    <th v-for="(column, index) in header" :key="index">{{ column.text }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(task, index) in allTasks" :key="index" @click="viewTask(task)">
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.description }}</td>
+                    <td>{{ task.category }}</td>
+                    <td>{{ task.priority }}</td>
+                    <td>{{ task.deadline }}</td>
+                    <td>{{ task.status }}</td>
+                  </tr>
+                </tbody>
+            </table>
+
+            <!-- Overlay for the Update Task -->
+            <div v-if="showUpdateTaskForm" class="updateTaskOverlay">
+                <updatetask-form :task="selectedTask" @close="showUpdateTaskForm = false"></updatetask-form>
+            </div>
+
+          </div>
 
       </div>
 
@@ -64,10 +72,9 @@
             <h4>
               {{ author }}
             </h4>
-          </div>
         </div>
-
       </div>
+    </div>
 
     </div>
 
@@ -83,6 +90,8 @@
     data() {
       return {
           showAddTask: false,
+          showUpdateTaskForm: false,
+          selectedTask: null,
           currentTime: '', 
           currentDay: '', 
           currentDayTasks: [
@@ -93,8 +102,10 @@
           header: [
             { text: 'Title', value: 'title' },
             { text: 'Description', value: 'description' },
+            { text: 'Category', value: 'category' },
             { text: 'Priority', value: 'priority' },
             { text: 'Deadline', value: 'deadline' },
+            { text: 'Status', value: 'status' },
           ],
           quote: '',
       };
@@ -124,6 +135,9 @@
       },
       addTask() {
         this.showAddTask = true;
+      },
+      viewTask(task){
+        this.showUpdateTaskForm = true;
       },
       async addTaskFinish() {
         this.showAddTask = false;
@@ -170,13 +184,6 @@
           console.log(tsa)
           return dateA.getTime() - dateB.getTime() 
         })
-
-        this.columns = [
-            { field: 'code', header: 'Code' },
-            { field: 'name', header: 'Name' },
-            { field: 'category', header: 'Category' },
-            { field: 'quantity', header: 'Quantity' }
-        ];
     },
     
   };
@@ -249,13 +256,13 @@
     overflow-x: auto; 
     gap: 20px; 
     padding: 10px; 
-    margin-left: 20px;
+    margin-left: 30px;
   }
 
 
   /** To Do List Section Style */
   .todo-section {
-    margin: 15px;
+    margin: 10px;
     display: flex; 
     flex-direction: row; 
     justify-content: space-between; 
@@ -264,7 +271,7 @@
   }
 
   .left-section {
-    flex: 7; 
+    flex: 8; 
     padding: 5px;
     height: 320px;
     position: static;
@@ -279,16 +286,15 @@
     margin: 20px;
     margin-top: 10px;
     height: 260px;
-    border: 2px solid #e7e7e7bb;
   }
 
 
   .right-section {
     flex: 3; 
-    margin-left: 20px; 
     padding: 5px; 
     height: 320px;
     position: static;
+
   }
 
   .quote {
@@ -331,6 +337,19 @@
       background-color: #f2f2f2;
       color: black;
   }
+
+  .todo-table tr:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+
+  .updateTaskOverlay {
+    display: flex; 
+    overflow-x: auto; 
+    gap: 20px; 
+    padding: 10px; 
+    margin-left: 30px;
+ }
 
   
 </style>

@@ -40,7 +40,7 @@
    
 <style scoped>
    v-container {
-       background-color: #BADCDC;
+       background-color: #C1D8C3;
        border-radius: 10px;
        height: 150px;
        width: 250px;
@@ -48,11 +48,6 @@
        
    }
 
-   v-container:hover {
-    background-color: #C6DCBA;
-    cursor: pointer;
-  }
-   
    .task-content {
        padding: 20px;
        display: flex; /* Make .task-content a flex container */

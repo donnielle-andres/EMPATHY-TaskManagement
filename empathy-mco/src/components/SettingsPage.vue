@@ -20,8 +20,9 @@
                         <div v-for="(priority, index) in taskPriorities" :key="index" class="task-priority-container">
                             <h4>{{ priority.number }}</h4>
                             <input type="text" :id="`taskPriority-${priority.number}`" v-model="priority.value" />
+                            <span class="material-symbols-outlined delete-button" @click="deleteTaskPriority(index)"> delete </span>
                         </div>
-
+                        
                         <div class="prio-btn">
                             <button @click="addTaskPriority">Add Task Priority</button>
                         </div>
@@ -41,10 +42,11 @@
                     <label for="busy-timeslots">Busy Timeslots:</label>
                     <div class="busy-input">
                         <div v-for="(timeslot, index) in timeslots" :key="index" class="busytime-container">
-                            <h4>{{ timeslot.number }}</h4>
+                            <h4 class="busytime-index">{{ timeslot.number }}</h4>
                             <input type="text" :id="`busy-timeslots-input-before-${timeslot.number}`" v-model="timeslot.before" />
                             <h4>-</h4>
                             <input type="text" :id="`busy-timeslots-input-after-${timeslot.number}`" v-model="timeslot.after" />
+                            <span class="material-symbols-outlined delete-button" @click="deleteTimeslot(index)"> delete </span>
                         </div>
                         <div class="busy-btn">
                             <button @click="addTimeslot">Add Timeslot</button>
@@ -82,16 +84,32 @@ import { ref } from 'vue';
             timeslots.value.push({ number, before: '', after: '' });
         };
 
+        const deleteTimeslot = (index) => {
+            timeslots.value.splice(index, 1);
+            timeslots.value.forEach((timeslot, newIndex) => {
+                timeslot.number = newIndex + 1; 
+            });
+        };
+
         const addTaskPriority = () => {
             const number = taskPriorities.value.length + 1; // Start from 1 and increment
             taskPriorities.value.push({ number, value: '' });
         };
 
+        const deleteTaskPriority = (index) => {
+            taskPriorities.value.splice(index, 1);
+            taskPriorities.value.forEach((taskPriority, newIndex) => {
+                taskPriority.number = newIndex + 1; 
+            });
+        };
+
         return {
         timeslots,
         addTimeslot,
+        deleteTimeslot,
         taskPriorities,
         addTaskPriority,
+        deleteTaskPriority,
         fullName,
         dailyTimeInputBefore,
         dailyTimeInputAfter,
@@ -180,7 +198,7 @@ import { ref } from 'vue';
 
     /** AVAILABLE DAILY SCHED */
     h4 {
-        margin-left: 2vh;
+        margin-left: 1vh;
         margin-right: 1vh;
         height: 4vh;
         width: 2vh;
@@ -189,7 +207,11 @@ import { ref } from 'vue';
     .dailytime-container {
         display: flex;
         align-items: center; 
-        padding-left:6.5vh;
+        padding-left: 41px;
+        width: 687px;
+    }
+
+    .dailytime-container input{
         width: 687px;
     }
 
@@ -197,17 +219,30 @@ import { ref } from 'vue';
     .busytime-container {
         display: flex;
         align-items: center; 
-        padding-left: 12px;
-        width: 687px;
+        width: 677px;
+        margin-left: 10px;
+        
     }
 
     .busytime-container label {
-        margin-right: 11px;
+        margin-right: 10px;
     }
+
+    .busytime-container input {
+        width: 675px;
+        height: 5vh;
+
+    }
+
+    .busytime-index{
+        margin-right: 15.5px;
+    }
+
 
     .busy-btn{
         margin-left: 10px;
     }
+
 
     .label-number{
         width: 3vh;
@@ -235,12 +270,23 @@ import { ref } from 'vue';
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     }
 
+    .delete-button {
+        height: 5vh;
+        cursor: pointer;
+        color: rgba(255, 0, 0, 0.363);
+    }
+
+    .delete-button:hover {
+        color: rgba(255, 0, 0, 0.63);
+        cursor: pointer;
+    }
+
     button:hover {
         background-color: rgba(0, 0, 0, 0.1); 
     }
 
     .save-btn {
-        margin-top: 10px;
+        margin-top: 30px;
         display: flex; 
         justify-content: center; 
     }

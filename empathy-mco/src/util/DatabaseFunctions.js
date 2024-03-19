@@ -46,8 +46,12 @@ async function getTasks() {
         let task = {
             title: data.Title,
             description: data.Description,
+            duration: data.Duration,
+            category: data.Category,
+            priority: data.Priority,
+            priority_val: data.Priority_Value,
+            status: data.Status,
             deadline: data.Deadline,
-            priority: data.Priority
         }
 
         tasks.push(task)

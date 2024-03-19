@@ -6,6 +6,7 @@ import SideNav from './components/SideNav.vue';
 import TaskCard from './components/TaskCard.vue';
 import TaskTable from './components/TaskTable.vue';
 import AddTask from './components/AddTask.vue';
+import ViewTask from './components/UpdateTask.vue';
 
 import { Calendar, DatePicker } from 'v-calendar';
 import 'v-calendar/style.css';
@@ -29,6 +30,7 @@ app.component('side-nav', SideNav);
 app.component('task-card', TaskCard);
 app.component('task-table', TaskTable);
 app.component('task-form', AddTask);
+app.component('updatetask-form', ViewTask);
 app.component('VCalendar', Calendar)
 app.component('VDatePicker', DatePicker)
 app.component('ejs-schedule', ScheduleComponent)

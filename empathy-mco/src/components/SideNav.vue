@@ -89,30 +89,30 @@ export default {
     .menu-wrap {
         display: flex;
         flex-direction: column;
-        gap: 40px; /* Adds some space between menu items */
+        justify-content: space-between; /* This will push the first child to the top and the last child to the bottom */
+        gap: 40px;
         margin: 30px;
         margin-top: 45px;
         align-items: left;
         cursor: pointer;
+        height: 100%; /* Ensure it takes up the full height of the aside */
     }
 
     .menu-item {
         display: flex;
-        align-items: center; /* Aligns icon and text vertically in the center */
-        gap: 10px; /* Adds some space between the icon and the text */
+        align-items: center;
+        gap: 10px;
     }
 
     .menu-item-setting {
-        margin-top: 410px;
         display: flex;
         align-items: center;
-        gap: 10px; 
+        gap: 10px;
     }
 
     .menu-item:hover, .menu-item-setting:hover {
         color: rgba(0, 0, 0, 0.63);
     }
 
-    
 
 </style>

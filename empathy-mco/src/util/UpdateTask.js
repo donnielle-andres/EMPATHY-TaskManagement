@@ -1,9 +1,9 @@
 import { app, db } from './firebase.js'
-import { collection, addDoc, updateDoc } from "firebase/firestore";
-import{ calculatePriority, updateTask } from './DatabaseFunctions.js';
+import { collection, addDoc } from "firebase/firestore";
+import{ calculatePriority } from './DatabaseFunctions.js';
 
 export default {
-    name: 'AddTask',
+    name: 'UpdateTask',
     data() {
         return {
           selectedDate: null,
@@ -33,9 +33,8 @@ export default {
   
           return `${yyyy}-${mm}-${dd}`;
         },
-        async addTask() {
-          // Add code to push thru the db
-          // this.$router.push({ name: 'MainPage' }); // should refresh to the schedboard
+        async updateTask() {
+          // Update this to reflect the contents of the current task and update task
 
           // Get numerical priority value so we can sort/schedule tasks
 
@@ -48,16 +47,26 @@ export default {
                   Title: this.title,
                   Description: this.details,
                   Duration: this.duration,
-                  Category: this.category,
                   Priority: this.priolevel,
                   Priority_Value: prioVal,
-                  Status: this.status,
                   Deadline: date.toLocaleDateString('en-CA', options)
               })
           } catch(e) {
               console.log(e)
           }
-          this.$emit('taskAdded'); // Emit the custom event
-        }
+          this.$emit('taskUpdated'); // Emit the custom event
+        },
+        async deleteTask() {
+          const taskId = ''; // Place Task ID
+  
+          try {
+              // Replace 'Tasks' with the actual name of the collection
+              await db.collection('Tasks').doc(taskId).delete();
+              console.log('Task deleted successfully');
+              this.$emit('taskDeleted'); 
+          } catch (error) {
+              console.error('Error deleting task:', error);
+          }
+      }
     }
     };
