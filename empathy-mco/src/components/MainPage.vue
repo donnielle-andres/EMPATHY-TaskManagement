@@ -15,7 +15,7 @@
       <div class="task-head"> 
         <h3> Tasks to do today! </h3>
         <v-btn class="task-button" @click="addTask()" > + Add Task</v-btn>
-        <task-form v-if="showAddTask" @close="showAddTask = false"  @taskAdded="addTaskFinish"></task-form>
+        <task-form v-if="showAddTask" @close="showAddTask = false" @taskAdded="addUpdateTaskFinish"></task-form>
       </div>
 
       <!-- Task Cards -->
@@ -39,7 +39,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(task, index) in allTasks" :key="index" @click="viewTask(task)">
+                  <tr v-for="(task, index) in allTasks" :key="index" @click="updateTask(task)">
                     <td>{{ task.title }}</td>
                     <td>{{ task.description }}</td>
                     <td>{{ task.category }}</td>
@@ -51,8 +51,9 @@
             </table>
 
             <!-- Overlay for the Update Task -->
+
             <div v-if="showUpdateTaskForm" class="updateTaskOverlay">
-                <updatetask-form :task="selectedTask" @close="showUpdateTaskForm = false"></updatetask-form>
+                <updatetask-form :task="selectedTask" @close="showUpdateTaskForm = false" @taskDeleted="addUpdateTaskFinish"></updatetask-form>
             </div>
 
           </div>
@@ -136,11 +137,15 @@
       addTask() {
         this.showAddTask = true;
       },
-      viewTask(task){
+      updateTask(task){
+        console.log("Opening Update Task Form for: " + task.id)
         this.showUpdateTaskForm = true;
+        this.selectedTask = task;
       },
-      async addTaskFinish() {
-        this.showAddTask = false;
+      async addUpdateTaskFinish() {
+        console.log("Hererererer")
+        this.showAddTask = false
+        this.showUpdateTaskForm = false
         this.allTasks = await getTasks()
         
         this.allTasks.sort((a, b) => {
@@ -150,8 +155,6 @@
           const dateA = new Date(tsa)
           const dateB = new Date(tsb)
 
-          console.log("Yes")
-          console.log(tsa)
           return dateA.getTime() - dateB.getTime() 
         })
       },
@@ -180,8 +183,6 @@
           const dateA = new Date(tsa)
           const dateB = new Date(tsb)
 
-          console.log("Yes")
-          console.log(tsa)
           return dateA.getTime() - dateB.getTime() 
         })
     },

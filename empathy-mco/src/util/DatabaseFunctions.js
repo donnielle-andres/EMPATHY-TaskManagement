@@ -1,4 +1,4 @@
-import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { db } from './firebase.js'
 
 function calculatePriority(dl, prio) {
@@ -41,9 +41,11 @@ async function getTasks() {
     query.forEach((doc) => {
 
         const data = doc.data()
+        console.log(doc.id)
 
         //Follows format for displaying in MainPage
         let task = {
+            id: doc.id,
             title: data.Title,
             description: data.Description,
             duration: data.Duration,
@@ -57,13 +59,18 @@ async function getTasks() {
         tasks.push(task)
     })
 
-    console.log(tasks)
-
     return tasks
 }
 
+async function getTask(id) {
+    const taskRef = doc(db, "Tasks", id);
+    const task = await getDoc(taskRef);
+
+    return task
+}
+
 async function updateTask(id, updatedTask) {
-    const prioVal = calculatePriority(this.selectedDate, this.priolevel)
+    const prioVal = calculatePriority(updatedTask.selectedDate, updatedTask.priolevel)
     const date = new Date(updatedTask.selectedDate);
     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
@@ -74,6 +81,7 @@ async function updateTask(id, updatedTask) {
         Duration: updatedTask.duration,
         Priority: updatedTask.priolevel,
         Priority_Value: prioVal,
+
         Deadline: date.toLocaleDateString('en-CA', options)
     })
 
@@ -84,4 +92,4 @@ async function deleteTask(id) {
     await deleteDoc(doc(db, "Tasks", id))
 }
 
-export { calculatePriority, getTasks, updateTask, deleteTask}
+export { calculatePriority, getTasks, updateTask, deleteTask, getTask }

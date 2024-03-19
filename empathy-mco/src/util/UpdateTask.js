@@ -1,9 +1,15 @@
 import { app, db } from './firebase.js'
-import { collection, addDoc } from "firebase/firestore";
+import { doc, collection, updateDoc, deleteDoc } from "firebase/firestore";
 import{ calculatePriority } from './DatabaseFunctions.js';
 
 export default {
     name: 'UpdateTask',
+    props: {
+      task: {
+        type: Object,
+        required: true
+      }
+    },
     data() {
         return {
           selectedDate: null,
@@ -43,27 +49,31 @@ export default {
           const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
           try {
-              const reference = await addDoc(collection(db, "Tasks"), {
-                  Title: this.title,
-                  Description: this.details,
-                  Duration: this.duration,
-                  Priority: this.priolevel,
-                  Priority_Value: prioVal,
-                  Deadline: date.toLocaleDateString('en-CA', options)
-              })
+            console.log("updating")
+              // const taskRef = doc(db, 'Tasks', this.id)
+              // const reference = await updateDoc(taskRef, {
+              //     Title: this.title,
+              //     Description: this.details,
+              //     Duration: this.duration,
+              //     Category: this.category,
+              //     Priority: this.priolevel,
+              //     Priority_Value: prioVal,
+              //     Status: this.status,
+              //     Deadline: date.toLocaleDateString('en-CA', options)
+              // })
+
+              // console.log(`Updated task with docId: ${reference.id}`)
           } catch(e) {
               console.log(e)
           }
           this.$emit('taskUpdated'); // Emit the custom event
         },
-        async deleteTask() {
-          const taskId = ''; // Place Task ID
-  
+        async deleteTask(id) {
           try {
               // Replace 'Tasks' with the actual name of the collection
-              await db.collection('Tasks').doc(taskId).delete();
-              console.log('Task deleted successfully');
-              this.$emit('taskDeleted'); 
+              await deleteDoc(doc(db, "Tasks", id))
+              console.log(`Task ${id} deleted successfully`);
+              this.$emit('taskDeleted');
           } catch (error) {
               console.error('Error deleting task:', error);
           }

@@ -6,14 +6,14 @@
           <div class="title"> Update Task </div>
           <v-btn class="close-btn" @click="closeForm()">
             <span class="material-symbols-outlined">
-            close
+            closes
             </span>
           </v-btn>
         </div>
 
         <div class="body">
           <div class="tasktitle"> Task Title: </div>
-          <input class="title-input" v-model="title" placeholder="Task Title" />
+          <input class="title-input" v-model="title" />
 
           <div class="taskdeets"> Task Details: </div>
           <p style="white-space: pre-line;"> </p>
@@ -60,7 +60,7 @@
             <div class="taskddl-left">Task Deadline
               <div class="button-section">
                 <v-btn class="update-task-btn" @click="updateTask()"> Save </v-btn>
-                <span class="material-symbols-outlined" @click="deleteTask()"> delete </span>
+                <span class="material-symbols-outlined" @click="deleteTask(task.id)"> delete </span>
               </div>
             </div>
 
