@@ -15,12 +15,12 @@
       <div class="task-head"> 
         <h3> Tasks to do today! </h3>
         <v-btn class="task-button" @click="addTask()" > + Add Task</v-btn>
-        <task-form v-if="showAddTask" @close="showAddTask = false"  @taskAdded="showAddTask = false"></task-form>
+        <task-form v-if="showAddTask" @close="showAddTask = false"  @taskAdded="addTaskFinish"></task-form>
       </div>
 
       <!-- Task Cards -->
       <div class="task-cards">
-        <task-card v-for="(task, index) in tasks" :key="index" :task="task" />
+        <task-card v-for="(task, index) in currentDayTasks" :key="index" :task="task" />
       </div>
       
     </div>
@@ -39,7 +39,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(task, index) in tasks" :key="index">
+              <tr v-for="(task, index) in allTasks" :key="index">
                 <td>{{ task.title }}</td>
                 <td>{{ task.description }}</td>
                 <td>{{ task.priority }}</td>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-
+  import { getTasks } from '../util/DatabaseFunctions.js'
   export default {
     name: 'MainPage',
     data() {
@@ -78,10 +78,11 @@
           showAddTask: false,
           currentTime: '', 
           currentDay: '', 
-          tasks: [
-            { title: 'Task 1', description: 'description 1', priority: 'High Priority', deadline: '03/10/2024'},
+          currentDayTasks: [
+            { title: 'Task 1', description: 'description 1', priority: 'Low Priority', deadline: '05/10/2024'},
             { title: 'Task 2', description: 'description 2', priority: 'High Priority', deadline: '04/10/2024' },
           ],
+          allTasks: [],
           header: [
             { text: 'Title', value: 'title' },
             { text: 'Description', value: 'description' },
@@ -114,12 +115,40 @@
       },
       addTask() {
         this.showAddTask = true;
-        this.tasks.push({ id: this.tasks.length + 1, title: 'New Task', description: 'New description', priority: 'Medium Priority', deadline: '2024-05-10T15:00:00' });
-        this.$emit('tasks-updated', this.tasks);
+      },
+      async addTaskFinish() {
+        this.showAddTask = false;
+        this.allTasks = await getTasks()
+        
+        this.allTasks.sort((a, b) => {
+          const tsa = Date.parse(a.deadline)
+          const tsb = Date.parse(b.deadline)
+
+          const dateA = new Date(tsa)
+          const dateB = new Date(tsb)
+
+          console.log("Yes")
+          console.log(tsa)
+          return dateA.getTime() - dateB.getTime() 
+        })
       }
     },
 
-    created() {
+    async created() {
+        this.allTasks = await getTasks()
+
+        this.allTasks.sort((a, b) => {
+          const tsa = Date.parse(a.deadline)
+          const tsb = Date.parse(b.deadline)
+
+          const dateA = new Date(tsa)
+          const dateB = new Date(tsb)
+
+          console.log("Yes")
+          console.log(tsa)
+          return dateA.getTime() - dateB.getTime() 
+        })
+
         this.columns = [
             { field: 'code', header: 'Code' },
             { field: 'name', header: 'Name' },

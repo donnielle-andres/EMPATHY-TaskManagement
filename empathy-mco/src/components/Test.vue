@@ -1,7 +1,5 @@
 <template>
-  Test
-
-  {{  fart  }}
+<v-btn class="task-button" @click="test()" > + Add Task</v-btn>
 </template>
 
 <script>
