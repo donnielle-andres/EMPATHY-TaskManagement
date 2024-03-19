@@ -6,28 +6,28 @@
           <div class="title"> Update Task </div>
           <v-btn class="close-btn" @click="closeForm()">
             <span class="material-symbols-outlined">
-            closes
+            close
             </span>
           </v-btn>
         </div>
 
         <div class="body">
           <div class="tasktitle"> Task Title: </div>
-          <input class="title-input" v-model="title" />
+          <input class="title-input" v-model="localTask.title"/>
 
           <div class="taskdeets"> Task Details: </div>
           <p style="white-space: pre-line;"> </p>
-          <textarea class="deets-input" v-model="details" placeholder="Task Details"></textarea>
+          <textarea class="deets-input" v-model="localTask.description"></textarea>
 
           <div class="taskduration"> 
             <div class="duration"> Task Daily Duration
-              <textarea class="dur-input" v-model="duration" placeholder="In Minutes"></textarea>
+              <textarea class="dur-input" v-model="localTask.duration"></textarea>
             </div>
           </div>
 
           <div class="categ-section">
             <div class="taskcateg">Task Category </div>
-            <select class="categ-input" v-model="categlevel">
+            <select class="categ-input" v-model="localTask.category">
               <option disabled value="">Please select one</option>
               <option>Category 1</option>
               <option>Category 2</option>
@@ -38,7 +38,7 @@
 
           <div class="prio-section">
             <div class="taskprio">Task Priority </div>
-            <select class="prio-input" v-model="priolevel">
+            <select class="prio-input" v-model="localTask.priority">
               <option disabled value="">Please select one</option>
               <option>High Priority</option>
               <option>Mid Priority</option>
@@ -48,7 +48,7 @@
 
           <div class="status-section">
             <div class="taskstatus">Task Status </div>
-            <select class="status-input" v-model="priolevel">
+            <select class="status-input" v-model="localTask.status">
               <option disabled value="">Please select one</option>
               <option>Not Started</option>
               <option>In Progress</option>
@@ -59,16 +59,16 @@
           <div class="ddl-section">
             <div class="taskddl-left">Task Deadline
               <div class="button-section">
-                <v-btn class="update-task-btn" @click="updateTask()"> Save </v-btn>
+                <v-btn class="update-task-btn" @click="updateTask(task.id)"> Save </v-btn>
                 <span class="material-symbols-outlined" @click="deleteTask(task.id)"> delete </span>
               </div>
             </div>
 
             <div class="taskddl-right" @click="showDatePicker = showDatePicker">
-              {{ formattedDate }}
+              {{ localTask.deadline }}
               <v-date-picker
                 v-if="showDatePicker"
-                v-model="selectedDate"
+                v-model="localTask.deadline"
                 :portrait="true"
               ></v-date-picker>
             </div>

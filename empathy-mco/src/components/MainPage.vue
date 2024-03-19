@@ -53,7 +53,7 @@
             <!-- Overlay for the Update Task -->
 
             <div v-if="showUpdateTaskForm" class="updateTaskOverlay">
-                <updatetask-form :task="selectedTask" @close="showUpdateTaskForm = false" @taskDeleted="addUpdateTaskFinish"></updatetask-form>
+                <updatetask-form :task="selectedTask" @close="showUpdateTaskForm = false" @taskDeleted="addUpdateTaskFinish" @taskUpdated="addUpdateTaskFinish"></updatetask-form>
             </div>
 
           </div>

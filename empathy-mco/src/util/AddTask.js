@@ -45,13 +45,13 @@ export default {
 
           try {
               const reference = await addDoc(collection(db, "Tasks"), {
-                  Title: this.title,
-                  Description: this.details,
-                  Duration: this.duration,
-                  Category: this.category,
-                  Priority: this.priolevel,
+                  Title: this.title == null ? "" : this.title,
+                  Description: this.details == null ? "" : this.details,
+                  Duration: this.duration == null ? "" : this.duration,
+                  Category: this.category == null ? "" : this.category,
+                  Priority: this.priolevel == null ? "" : this.priolevel,
                   Priority_Value: prioVal,
-                  Status: this.status,
+                  Status: this.status == null ? "" : this.status,
                   Deadline: date.toLocaleDateString('en-CA', options)
               })
           } catch(e) {
