@@ -1,13 +1,12 @@
 import { firebase, db } from './firebase.js'
 import { collection, addDoc, getDocs} from "firebase/firestore";
-import { getTasks } from './DatabaseFunctions.js'
+import { getTasksForUser } from './DatabaseFunctions.js'
 export default {
     name: "TestPage",
 
     async created() {
-        console.log("Hellow")
-
-        const tasks = await getTasks()
+        console.log("In test")
+        const tasks = await getTasksForUser("testId1")
     },
 
     data(){

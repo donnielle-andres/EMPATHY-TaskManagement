@@ -1,4 +1,4 @@
-import { doc, collection, addDoc, getDocs, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
+import { doc, collection, getDocs, getDoc } from "firebase/firestore";
 import { db } from './firebase.js'
 
 function calculatePriority(dl, prio) {
@@ -32,64 +32,44 @@ function calculatePriority(dl, prio) {
     return priorityVal
 }
 
-async function getTasks() {
+async function getTasksForUser(userId) {
     let tasks = []
 
-    const query = await getDocs(collection(db, "Tasks"));
-            
-    console.log("Queried")
-    query.forEach((doc) => {
+    const userRef = doc(db, "Users", userId)
+    const userResult = await getDoc(userRef);
 
-        const data = doc.data()
-        console.log(doc.id)
+    // if userId exists, return all of their tasks
+    if (userResult.exists()) {
+        console.log(userId + " exists!!!!")
+        const tasksRef = collection(db, "Users", userId, "Tasks")
+        const tasksResults = await getDocs(tasksRef);
 
-        //Follows format for displaying in MainPage
-        let task = {
-            id: doc.id,
-            title: data.Title,
-            description: data.Description,
-            duration: data.Duration,
-            category: data.Category,
-            priority: data.Priority,
-            priority_val: data.Priority_Value,
-            status: data.Status,
-            deadline: data.Deadline,
-        }
+        tasksResults.forEach((doc) => {
 
-        tasks.push(task)
-    })
+            const data = doc.data()
+            console.log(doc.id)
+    
+            //Follows format for displaying in MainPage
+            let task = {
+                id: doc.id,
+                title: data.Title,
+                description: data.Description,
+                duration: data.Duration,
+                category: data.Category,
+                priority: data.Priority,
+                priority_val: data.Priority_Value,
+                status: data.Status,
+                deadline: data.Deadline,
+            }
+    
+            tasks.push(task)
+        })
+    
+        return tasks
+    }
 
-    return tasks
+    return null
+    
 }
 
-async function getTask(id) {
-    const taskRef = doc(db, "Tasks", id);
-    const task = await getDoc(taskRef);
-
-    return task
-}
-
-async function updateTask(id, updatedTask) {
-    const prioVal = calculatePriority(updatedTask.selectedDate, updatedTask.priolevel)
-    const date = new Date(updatedTask.selectedDate);
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-
-    const taskRef = doc(db, 'Tasks', id)
-    const reference = await updateDoc(taskRef, {
-        Title: updatedTask.title,
-        Description: updatedTask.details,
-        Duration: updatedTask.duration,
-        Priority: updatedTask.priolevel,
-        Priority_Value: prioVal,
-
-        Deadline: date.toLocaleDateString('en-CA', options)
-    })
-
-    return reference
-}
-
-async function deleteTask(id) {
-    await deleteDoc(doc(db, "Tasks", id))
-}
-
-export { calculatePriority, getTasks, updateTask, deleteTask, getTask }
+export { calculatePriority, getTasksForUser }

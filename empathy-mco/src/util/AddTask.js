@@ -54,6 +54,8 @@ export default {
                   Status: this.status == null ? "" : this.status,
                   Deadline: date.toLocaleDateString('en-CA', options)
               })
+
+              console.log(`Added task`)
           } catch(e) {
               console.log(e)
           }

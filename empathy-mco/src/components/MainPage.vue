@@ -84,12 +84,13 @@
 </template>
 
 <script>
-  import { getTasks } from '../util/DatabaseFunctions.js'
+  import { getTasksForUser } from '../util/DatabaseFunctions.js'
   import axios from 'axios';
   export default {
     name: 'MainPage',
     data() {
       return {
+          userId: null,
           showAddTask: false,
           showUpdateTaskForm: false,
           selectedTask: null,
@@ -110,6 +111,16 @@
           ],
           quote: '',
       };
+    },
+
+    watch: {
+      '$route.params.id': {
+        handler(newVal, oldVal) {
+          this.userId = newVal;
+          this.populateTodo()
+        },
+        immediate: true, // Access the initial value on component creation
+      },
     },
 
     mounted() {
@@ -143,20 +154,9 @@
         this.selectedTask = task;
       },
       async addUpdateTaskFinish() {
-        console.log("Hererererer")
         this.showAddTask = false
         this.showUpdateTaskForm = false
-        this.allTasks = await getTasks()
-        
-        this.allTasks.sort((a, b) => {
-          const tsa = Date.parse(a.deadline)
-          const tsb = Date.parse(b.deadline)
-
-          const dateA = new Date(tsa)
-          const dateB = new Date(tsb)
-
-          return dateA.getTime() - dateB.getTime() 
-        })
+        this.populateTodo()
       },
       async fetchQuoteContent() {
         const category = 'success';
@@ -171,22 +171,27 @@
           console.error('Failed to fetch quote content:', error);
         }
       },
+      async populateTodo() {
+        // If userId doesn't exit, default to testId1
+        console.log("aaaaa " + this.userId);
+        const tasks = await getTasksForUser(this.userId)
+        if (tasks == null)
+          this.$router.push({ name: 'MainPage', params: {id: "testId1"}})
+        else {
+          this.allTasks = tasks
+
+          this.allTasks.sort((a, b) => {
+            const tsa = Date.parse(a.deadline)
+            const tsb = Date.parse(b.deadline)
+
+            const dateA = new Date(tsa)
+            const dateB = new Date(tsb)
+
+            return dateA.getTime() - dateB.getTime() 
+          })
+        }
+      }
     },
-
-    async created() {
-        this.allTasks = await getTasks()
-
-        this.allTasks.sort((a, b) => {
-          const tsa = Date.parse(a.deadline)
-          const tsb = Date.parse(b.deadline)
-
-          const dateA = new Date(tsa)
-          const dateB = new Date(tsb)
-
-          return dateA.getTime() - dateB.getTime() 
-        })
-    },
-    
   };
 </script>
 

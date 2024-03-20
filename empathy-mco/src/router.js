@@ -9,7 +9,7 @@ import TestPage from './components/Test.vue'
 
 const routes = [
     {
-        path: '/',
+        path: '/:id',
         name: 'MainPage',   
         component: MainPage
     },
