@@ -15,17 +15,17 @@
             <div class="pref-info">
 
                 <div class="prio-section">
-                    <label for="task-category-prioritization">Task Category Prioritization:</label>
+                    <label for="task-category-prioritization">Task Categories:</label>
                     <div class="prio-input">
-                        <div v-for="(priority, index) in taskPriorities" :key="index" class="task-priority-container">
-                            <h4>{{ priority.number }}</h4>
-                            <input type="text" :id="`taskPriority-${priority.number}`" v-model="priority.value" />
-                            <span class="material-symbols-outlined delete-button" @click="deleteTaskPriority(index)"> delete </span>
+                        <div v-for="(category, index) in taskCategories" :key="index" class="task-priority-container">
+                            <h4>{{ category.number }} </h4> <h4> {{ category.value}} </h4>
+                            <span class="material-symbols-outlined delete-button" @click="deleteTaskCategory(index)"> delete </span>
+                        </div>
+                        <div class="prio-btn">
+                            <button @click="addCategory">Add Task Category</button> <input type="text" class="taskCategory" v-model="taskCategory"/>
                         </div>
                         
-                        <div class="prio-btn">
-                            <button @click="addTaskPriority">Add Task Priority</button>
-                        </div>
+                        
                     </div>
                 </div>
 
@@ -47,18 +47,21 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue';
+import { reactive, VueElement, onMounted, ref, nextTick } from 'vue';
 import { useRoute } from 'vue-router'
 import { db } from '../util/firebase.js'
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, deleteDoc, addDoc, collection } from "firebase/firestore";
 
     export default {
+
     setup() {
+        console.log("Setup")
         const route = useRoute()
 
         var fullName = ref(null);
         const dailyTimeInputBefore = ref('08:00');
         const dailyTimeInputAfter = ref('17:00');
+<<<<<<< Updated upstream
         const taskPriorities = ref([{ number: 1, value: '' }]);
 
         const updateSettings = () => {
@@ -77,28 +80,119 @@ import { doc, getDoc } from "firebase/firestore";
                 taskPriority.number = newIndex + 1; 
             });
         };
+=======
+        const timeslots = ref([{ number: 1, value: '' }]);
+        let taskCategories = reactive([])
+        
+        const updateSettings = () => {
+            // save settings here
+        };
+
+        const addTimeslot = () => {
+            const number = timeslots.value.length + 1; // Start from 1 and increment
+            timeslots.value.push({ number, before: '', after: '' });
+        };
+
+        const deleteTimeslot = (index) => {
+            timeslots.value.splice(index, 1);
+            timeslots.value.forEach((timeslot, newIndex) => {
+                timeslot.number = newIndex + 1; 
+            });
+        };
+
+>>>>>>> Stashed changes
 
         const fetchUserData = async () => {
             const userId = route.params.id
             const userRef = doc(db, "Users", userId)
             const userResult = await getDoc(userRef);
             fullName.value = userResult.data().Name
+            
+            const categoriesCollection = collection(db, "Users", userId, "Categories")
+            const categoriesDocs = await getDocs(categoriesCollection)
+
+            categoriesDocs.forEach((data) => {
+                console.log(data.data())
+                
+                taskCategories.push({
+                    number: taskCategories.length + 1,
+                    value: data.data().Value, 
+                    id: data.id
+                })
+            })
         };
 
-        onMounted(() => {
-            fetchUserData()
+        onMounted(async() => {
+            console.log("Mount")
+            
+            await fetchUserData()
         })
 
         return {
+<<<<<<< Updated upstream
         taskPriorities,
         addTaskPriority,
         deleteTaskPriority,
+=======
+        timeslots,
+        addTimeslot,
+        deleteTimeslot,
+        taskCategories,
+>>>>>>> Stashed changes
         fullName,
         dailyTimeInputBefore,
         dailyTimeInputAfter,
         updateSettings,
         };
     },
+
+
+    methods: {
+        async addCategory() {
+            const userId = this.$route.params.id
+            const categoriesCollection = collection(db, "Users", userId, "Categories")
+            const categoriesDocs = await getDocs(categoriesCollection)
+
+            const ref = await addDoc(categoriesCollection, {
+                Value: this.taskCategory
+            })
+
+            const newDoc = await getDoc(ref)
+
+            const catId = newDoc.id
+
+            console.log("ID: " + catId)
+                    
+            this.taskCategories.push({
+                number: this.taskCategories.length + 1,
+                value: this.taskCategory,
+                id: catId
+            })
+
+            this.taskCategory = ""
+
+            this.taskCategories.forEach((c) => {
+                console.log(c.id)
+            })
+        },
+        async getCategories() {
+            const userId = this.$route.params.id
+            const categoriesCollection = collection(db, "Users", userId, "Categories")
+            const categoriesDocs = await getDocs(categoriesCollection)
+
+            categoriesDocs.forEach((data) => {
+                console.log(data.data())
+            })
+        },
+        async deleteTaskCategory(index) {
+            const userId = this.$route.params.id
+            await deleteDoc(doc(db, "Users", userId, "Categories", this.taskCategories[index].id))
+
+            this.taskCategories.splice(index, 1)
+        }
+
+        
+    }
     };
 </script>
 
@@ -170,8 +264,9 @@ import { doc, getDoc } from "firebase/firestore";
         height: 5vh;
     }
 
-    .prio-input{
+    .taskCategory {
         margin-left: 10px;
+        width: 50vh;
     }
 
     .prio-btn {
@@ -184,7 +279,7 @@ import { doc, getDoc } from "firebase/firestore";
         margin-left: 1vh;
         margin-right: 1vh;
         height: 4vh;
-        width: 2vh;
+        width: 25vh;
     }
 
     .dailytime-container {
@@ -254,6 +349,7 @@ import { doc, getDoc } from "firebase/firestore";
     }
 
     .delete-button {
+        margin-left: 10px;
         height: 5vh;
         cursor: pointer;
         color: rgba(255, 0, 0, 0.363);

@@ -1,5 +1,5 @@
 import { app, db } from './firebase.js'
-import { doc, collection, updateDoc, deleteDoc } from "firebase/firestore";
+import { getDocs, doc, collection, updateDoc, deleteDoc } from "firebase/firestore";
 import{ calculatePriority } from './DatabaseFunctions.js';
 
 export default {
@@ -7,9 +7,20 @@ export default {
     props: ['task', 'userId'],
     data() {
         return {
+          categories: [],
           showDatePicker: true,
           localTask: {...this.task}
         };  
+    },
+    async created() {
+      const userId = this.$route.params.id
+      const categoriesCollection = collection(db, "Users", userId, "Categories")
+      const categoriesDocs = await getDocs(categoriesCollection)
+
+      categoriesDocs.forEach((data) => {
+          console.log(data.data())
+          this.categories.push(data.data().Value)
+      })
     },
     computed: {
       formattedDate() {
