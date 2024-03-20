@@ -38,22 +38,6 @@
                     </div>
                 </div>
 
-                <div class="busy-section">
-                    <label for="busy-timeslots">Busy Timeslots:</label>
-                    <div class="busy-input">
-                        <div v-for="(timeslot, index) in timeslots" :key="index" class="busytime-container">
-                            <h4 class="busytime-index">{{ timeslot.number }}</h4>
-                            <input type="text" :id="`busy-timeslots-input-before-${timeslot.number}`" v-model="timeslot.before" />
-                            <h4>-</h4>
-                            <input type="text" :id="`busy-timeslots-input-after-${timeslot.number}`" v-model="timeslot.after" />
-                            <span class="material-symbols-outlined delete-button" @click="deleteTimeslot(index)"> delete </span>
-                        </div>
-                        <div class="busy-btn">
-                            <button @click="addTimeslot">Add Timeslot</button>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="save-btn">
                     <button type="submit">Save Settings</button>
                 </div>
@@ -75,24 +59,11 @@ import { doc, getDoc } from "firebase/firestore";
         var fullName = ref(null);
         const dailyTimeInputBefore = ref('08:00');
         const dailyTimeInputAfter = ref('17:00');
-        const timeslots = ref([{ number: 1, value: '' }]);
         const taskPriorities = ref([{ number: 1, value: '' }]);
 
         const updateSettings = () => {
-            console.log('Updating settings:', { fullName: fullName.value, taskPriorities:taskPriorities.value, dailyTimeInputBefore:dailyTimeInputBefore.value, dailyTimeInputAfter:dailyTimeInputAfter.value, timeslots: timeslots.value});
+            console.log('Updating settings:', { fullName: fullName.value, taskPriorities:taskPriorities.value, dailyTimeInputBefore:dailyTimeInputBefore.value, dailyTimeInputAfter:dailyTimeInputAfter.value});
             // save settings here
-        };
-
-        const addTimeslot = () => {
-            const number = timeslots.value.length + 1; // Start from 1 and increment
-            timeslots.value.push({ number, before: '', after: '' });
-        };
-
-        const deleteTimeslot = (index) => {
-            timeslots.value.splice(index, 1);
-            timeslots.value.forEach((timeslot, newIndex) => {
-                timeslot.number = newIndex + 1; 
-            });
         };
 
         const addTaskPriority = () => {
@@ -119,9 +90,6 @@ import { doc, getDoc } from "firebase/firestore";
         })
 
         return {
-        timeslots,
-        addTimeslot,
-        deleteTimeslot,
         taskPriorities,
         addTaskPriority,
         deleteTaskPriority,
