@@ -5,7 +5,7 @@
         <form class="settings-form" @submit.prevent="updateSettings">
 
             <div class="name-section">
-                <h3>Full Name:</h3>
+                <h3>Full Name</h3>
                 <input class="name-input" type="text" id="fullName" v-model="fullName" />
             </div>
 
@@ -63,12 +63,16 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router'
+import { db } from '../util/firebase.js'
+import { doc, getDoc } from "firebase/firestore";
 
     export default {
     setup() {
-        // database connection here
-        const fullName = ref('John Doe');
+        const route = useRoute()
+
+        var fullName = ref(null);
         const dailyTimeInputBefore = ref('08:00');
         const dailyTimeInputAfter = ref('17:00');
         const timeslots = ref([{ number: 1, value: '' }]);
@@ -102,6 +106,17 @@ import { ref } from 'vue';
                 taskPriority.number = newIndex + 1; 
             });
         };
+
+        const fetchUserData = async () => {
+            const userId = route.params.id
+            const userRef = doc(db, "Users", userId)
+            const userResult = await getDoc(userRef);
+            fullName.value = userResult.data().Name
+        };
+
+        onMounted(() => {
+            fetchUserData()
+        })
 
         return {
         timeslots,

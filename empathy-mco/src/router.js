@@ -19,7 +19,7 @@ const routes = [
         component: SchedBoard
     },
     {
-        path: '/settings',
+        path: '/settings/:id',
         name: 'SettingsPage',
         component: SettingsPage
     },

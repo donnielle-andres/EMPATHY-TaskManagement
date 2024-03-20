@@ -1,13 +1,13 @@
 <template>
     <aside>
         <!-- User Information -->
-        <div class="user-profile">
+        <div class="user-profile" v-if="fullName">
             <div class="user-img">
                 <img class="usericn" src="../assets/account_circle.png">
             </div>
 
             <div class="user-info">
-                John Doe
+                {{ this.fullName }}
             </div>
         </div>
 
@@ -34,9 +34,28 @@
 
 
 <script>
+import { db } from '../util/firebase.js'
+import { doc, getDoc } from "firebase/firestore";
+
 export default {
- name: 'SideNav',
- methods: {
+    name: 'SideNav',
+    data() {
+        return {
+            fullName: null,
+            userId: null
+        }
+    },
+
+    watch: {
+      '$route.params.id': {
+        handler(newVal, oldVal) {
+          this.userId = newVal;
+          this.fetchUserData1();
+        },
+      },
+    },
+
+    methods: {
         gotoDashboard() {
             this.$router.push({ name: 'MainPage' });
         },
@@ -47,6 +66,12 @@ export default {
 
         gotoSettings() {
             this.$router.push({ name: 'SettingsPage' });
+        },
+
+        async fetchUserData1() {
+            const userRef = doc(db, "Users", this.userId)
+            const userResult = await getDoc(userRef);
+            this.fullName = userResult.data().Name
         }
     }
 }

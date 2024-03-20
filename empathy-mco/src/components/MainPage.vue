@@ -172,8 +172,7 @@
         }
       },
       async populateTodo() {
-        // If userId doesn't exit, default to testId1
-        console.log("aaaaa " + this.userId);
+        // If userId doesn't exist or no userId param, default to testId1
         const tasks = await getTasksForUser(this.userId)
         if (tasks == null)
           this.$router.push({ name: 'MainPage', params: {id: "testId1"}})
