@@ -59,8 +59,8 @@
           <div class="ddl-section">
             <div class="taskddl-left">Task Deadline
               <div class="button-section">
-                <v-btn class="update-task-btn" @click="updateTask(task.id)"> Save </v-btn>
-                <span class="material-symbols-outlined" @click="deleteTask(task.id)"> delete </span>
+                <v-btn class="update-task-btn" @click="updateTask()"> Save </v-btn>
+                <span class="material-symbols-outlined" @click="deleteTask()"> delete </span>
               </div>
             </div>
 

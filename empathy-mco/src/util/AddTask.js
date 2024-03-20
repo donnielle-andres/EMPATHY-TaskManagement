@@ -10,6 +10,7 @@ export default {
           showDatePicker: true,
         };
     },
+    props: ["userId"],
     created() {
         this.selectedDate = this.getToday();
     },
@@ -44,7 +45,7 @@ export default {
           const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
           try {
-              const reference = await addDoc(collection(db, "Tasks"), {
+              const reference = await addDoc(collection(db, "Users", this.userId, "Tasks"), {
                   Title: this.title == null ? "" : this.title,
                   Description: this.details == null ? "" : this.details,
                   Duration: this.duration == null ? "" : this.duration,
@@ -55,7 +56,7 @@ export default {
                   Deadline: date.toLocaleDateString('en-CA', options)
               })
 
-              console.log(`Added task`)
+              console.log(`Added task ${reference.id} for user ${this.userId}`)
           } catch(e) {
               console.log(e)
           }

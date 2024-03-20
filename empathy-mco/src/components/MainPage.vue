@@ -15,7 +15,7 @@
       <div class="task-head"> 
         <h3> Tasks to do today! </h3>
         <v-btn class="task-button" @click="addTask()" > + Add Task</v-btn>
-        <task-form v-if="showAddTask" @close="showAddTask = false" @taskAdded="addUpdateTaskFinish"></task-form>
+        <task-form :userId="userId" v-if="showAddTask" @close="showAddTask = false" @taskAdded="addUpdateTaskFinish"></task-form>
       </div>
 
       <!-- Task Cards -->
@@ -53,7 +53,7 @@
             <!-- Overlay for the Update Task -->
 
             <div v-if="showUpdateTaskForm" class="updateTaskOverlay">
-                <updatetask-form :task="selectedTask" @close="showUpdateTaskForm = false" @taskDeleted="addUpdateTaskFinish" @taskUpdated="addUpdateTaskFinish"></updatetask-form>
+                <updatetask-form :task="selectedTask" :userId="userId" @close="showUpdateTaskForm = false" @taskDeleted="addUpdateTaskFinish" @taskUpdated="addUpdateTaskFinish"></updatetask-form>
             </div>
 
           </div>

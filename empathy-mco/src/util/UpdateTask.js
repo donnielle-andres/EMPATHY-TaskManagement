@@ -4,7 +4,7 @@ import{ calculatePriority } from './DatabaseFunctions.js';
 
 export default {
     name: 'UpdateTask',
-    props: ['task'],
+    props: ['task', 'userId'],
     data() {
         return {
           showDatePicker: true,
@@ -24,7 +24,7 @@ export default {
         closeForm() {
           this.$emit('close');
         },
-        async updateTask(id) {
+        async updateTask() {
           // Get numerical priority value so we can sort/schedule tasks
           const prioVal = calculatePriority(this.formattedDate, this.localTask.priolevel)
           const date = new Date(this.formattedDate);
@@ -32,7 +32,7 @@ export default {
 
           try {
             console.log("updating")
-              const taskRef = doc(db, 'Tasks', id)
+              const taskRef = doc(db, 'Users', this.userId, "Tasks", this.task.id)
               const reference = await updateDoc(taskRef, {
                   Title: this.localTask.title,
                   Description: this.localTask.description,
@@ -48,12 +48,12 @@ export default {
           } catch(e) {
               console.log(e)
           }
-          this.$emit('taskUpdated'); // Emit the custom event
+          this.$emit('taskUpdated');
         },
-        async deleteTask(id) {
+        async deleteTask() {
           try {
-              await deleteDoc(doc(db, "Tasks", id))
-              console.log(`Task ${id} deleted successfully`);
+              await deleteDoc(doc(db, "Users", this.userId, "Tasks",  this.task.id))
+              console.log(`Task ${this.task.id} deleted successfully`);
               this.$emit('taskDeleted');
           } catch (error) {
               console.error('Error deleting task:', error);
