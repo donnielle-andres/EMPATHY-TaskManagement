@@ -84,7 +84,7 @@
 </template>
 
 <script>
-  import { getTasksForUser } from '../util/DatabaseFunctions.js'
+  import { getTasksForUser, getTodayTasksForUser } from '../util/DatabaseFunctions.js'
   import axios from 'axios';
   export default {
     name: 'MainPage',
@@ -96,10 +96,7 @@
           selectedTask: null,
           currentTime: '', 
           currentDay: '', 
-          currentDayTasks: [
-            { title: 'Task 1', description: 'description 1', priority: 'Low Priority', deadline: '05/10/2024'},
-            { title: 'Task 2', description: 'description 2', priority: 'High Priority', deadline: '04/10/2024' },
-          ],
+          currentDayTasks: [],
           allTasks: [],
           header: [
             { text: 'Title', value: 'title' },
@@ -179,7 +176,9 @@
         else {
           this.allTasks = tasks
 
+
           this.allTasks.sort((a, b) => {
+
             const tsa = Date.parse(a.deadline)
             const tsb = Date.parse(b.deadline)
 
@@ -189,6 +188,9 @@
             return dateA.getTime() - dateB.getTime() 
           })
         }
+
+        this.currentDayTasks = await getTodayTasksForUser(this.userId)
+
       }
     },
   };

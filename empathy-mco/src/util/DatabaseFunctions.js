@@ -14,7 +14,7 @@ function calculatePriority(dl, prio) {
     
     switch(prio) {
         case "Low Priority":
-            multiplier = 0.5
+            multiplier = 1
             break
         
         case "Mid Priority":
@@ -22,12 +22,11 @@ function calculatePriority(dl, prio) {
             break
         
         case "High Priority":
-            multiplier = 1
+            multiplier = 0.5
             break
     }
 
     let priorityVal = difference * multiplier
-
     
     return priorityVal
 }
@@ -72,4 +71,65 @@ async function getTasksForUser(userId) {
     
 }
 
-export { calculatePriority, getTasksForUser }
+async function getTodayTasksForUser(userId) {
+    let tasks = []
+
+    const userRef = doc(db, "Users", userId)
+    const userResult = await getDoc(userRef);
+
+    // if userId exists, return all of their tasks
+    if (userResult.exists()) {
+        console.log(userId + " exists!!!!")
+        const tasksRef = collection(db, "Users", userId, "Tasks")
+        const tasksResults = await getDocs(tasksRef);
+
+        tasksResults.forEach((doc) => {
+
+            const data = doc.data()
+            console.log(doc.id)
+    
+            //Follows format for displaying in MainPage
+            let task = {
+                id: doc.id,
+                title: data.Title,
+                description: data.Description,
+                duration: data.Duration,
+                category: data.Category,
+                priority: data.Priority,
+                priority_val: data.Priority_Value,
+                status: data.Status,
+                deadline: data.Deadline,
+            }
+    
+            tasks.push(task)
+        })
+
+        tasks.sort((a, b) => {
+            return a.priority_val - b.priority_val
+        })
+
+        let todayTasks = []
+        let totalTime = 0
+
+        for(let i = 0;i < tasks.length;i++) {
+            let tempDuration = Number(tasks[i].duration)
+            totalTime += tempDuration
+
+            if(totalTime > 300) {
+                console.log(totalTime)
+                break;
+            }
+            else {
+                console.log("Added " + tasks[i].title + "| Time is now " + totalTime)
+                todayTasks.push(tasks[i])
+            }
+        }
+    
+        return todayTasks
+    }
+
+    return null
+    
+}
+
+export { calculatePriority, getTasksForUser, getTodayTasksForUser }
