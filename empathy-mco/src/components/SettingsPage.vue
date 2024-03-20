@@ -61,26 +61,6 @@ import { doc, getDoc, getDocs, deleteDoc, addDoc, collection } from "firebase/fi
         var fullName = ref(null);
         const dailyTimeInputBefore = ref('08:00');
         const dailyTimeInputAfter = ref('17:00');
-<<<<<<< Updated upstream
-        const taskPriorities = ref([{ number: 1, value: '' }]);
-
-        const updateSettings = () => {
-            console.log('Updating settings:', { fullName: fullName.value, taskPriorities:taskPriorities.value, dailyTimeInputBefore:dailyTimeInputBefore.value, dailyTimeInputAfter:dailyTimeInputAfter.value});
-            // save settings here
-        };
-
-        const addTaskPriority = () => {
-            const number = taskPriorities.value.length + 1; // Start from 1 and increment
-            taskPriorities.value.push({ number, value: '' });
-        };
-
-        const deleteTaskPriority = (index) => {
-            taskPriorities.value.splice(index, 1);
-            taskPriorities.value.forEach((taskPriority, newIndex) => {
-                taskPriority.number = newIndex + 1; 
-            });
-        };
-=======
         const timeslots = ref([{ number: 1, value: '' }]);
         let taskCategories = reactive([])
         
@@ -100,7 +80,6 @@ import { doc, getDoc, getDocs, deleteDoc, addDoc, collection } from "firebase/fi
             });
         };
 
->>>>>>> Stashed changes
 
         const fetchUserData = async () => {
             const userId = route.params.id
@@ -129,16 +108,10 @@ import { doc, getDoc, getDocs, deleteDoc, addDoc, collection } from "firebase/fi
         })
 
         return {
-<<<<<<< Updated upstream
-        taskPriorities,
-        addTaskPriority,
-        deleteTaskPriority,
-=======
         timeslots,
         addTimeslot,
         deleteTimeslot,
         taskCategories,
->>>>>>> Stashed changes
         fullName,
         dailyTimeInputBefore,
         dailyTimeInputAfter,
