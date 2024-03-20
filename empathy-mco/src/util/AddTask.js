@@ -1,17 +1,26 @@
 import { app, db } from './firebase.js'
-import { collection, addDoc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, updateDoc } from "firebase/firestore";
 import{ calculatePriority, updateTask } from './DatabaseFunctions.js';
 
 export default {
     name: 'AddTask',
     data() {
         return {
+          categories: [],
           selectedDate: null,
           showDatePicker: true,
         };
     },
     props: ["userId"],
-    created() {
+    async created() {
+        const userId = this.$route.params.id
+        const categoriesCollection = collection(db, "Users", userId, "Categories")
+        const categoriesDocs = await getDocs(categoriesCollection)
+
+        categoriesDocs.forEach((data) => {
+            console.log(data.data())
+            this.categories.push(data.data().Value)
+        })
         this.selectedDate = this.getToday();
     },
     computed: {

@@ -29,9 +29,7 @@
             <div class="taskcateg">Task Category </div>
             <select class="categ-input" v-model="category">
               <option disabled value="">Please select one</option>
-              <option>Category 1</option>
-              <option>Category 2</option>
-              <option>Category 3</option>
+              <option v-for="category in categories" :key="category">{{ category }}</option>
             </select>
           </div>
           
