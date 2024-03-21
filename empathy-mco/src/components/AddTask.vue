@@ -20,9 +20,14 @@
           <textarea class="deets-input" v-model="details" placeholder="Task Details"></textarea>
 
           <div class="taskduration"> 
-            <div class="duration"> Task Daily Duration
+            <div class="duration"> 
+              <div>
+                Task Daily Duration
+                <span class="note">Note! Maximum Daily Duration must be less than 300 minutes.</span>
+              </div>
               <textarea class="dur-input" v-model="duration" placeholder="In Minutes"></textarea>
             </div>
+            
           </div>
 
           <div class="categ-section">
@@ -147,15 +152,28 @@
       font-weight: bold;
       margin-bottom: 5px;
     }
+    .taskduration{
+      margin-bottom: 7px;
+    }
+
+    .note{
+      font-size: 10px;
+      font-weight: normal;
+      display: block; 
+      margin-top: 2px; 
+      width: 150px;
+    }
 
     .title-input{
       margin-bottom: 20px;
+      padding: 3px;
       width: 535px;
       height: 30px;
     } 
 
     .deets-input {
       margin-bottom: 20px;
+      padding: 3px;
       position: static;
       width: 535px;
       height: 70px;
@@ -169,8 +187,9 @@
     }
 
     .dur-input {
-      margin-bottom: 20px;
+      margin-bottom: 0px;
       margin-left: 43px;
+      padding: 3px;
       position: static;
       width: 340px;
       height: 25px;

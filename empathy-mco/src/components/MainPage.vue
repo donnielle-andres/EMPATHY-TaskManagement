@@ -20,7 +20,7 @@
 
       <!-- Task Cards -->
       <div class="task-cards">
-        <task-card class="task-card" v-for="(task, index) in currentDayTasks" :key="index" :task="task" @click="deleteTask(task, index)"/>
+        <task-card class="task-card" v-for="(task, index) in currentDayTasks" :key="index" :task="task" @taskDeleted="deleteTask(task, index)"/>
       </div>
       
     </div>
@@ -49,7 +49,7 @@
                   </tr>
                 </tbody>
             </table>
-            <div class="right-section">
+            <div class="tips-section">
               <div class="tips">
                 <div class="tips-content">
                   <h2>
@@ -80,9 +80,8 @@
             <h2>
               {{ quote }}
             </h2>
-            <br>
             <h4>
-              {{ author }}
+              - {{ author }}
             </h4>
         </div>
       </div>
@@ -123,11 +122,9 @@
           ],
           quote: '',
           tipsArray: [
-            "Tip 1: Always start with a clear goal.",
-            "Tip 2: Break down your tasks into manageable parts.",
-            "Tip 3: Take regular breaks to avoid burnout.",
-            "Tip 4: Stay organized with a to-do list.",
-            "Tip 5: Prioritize your tasks based on urgency and importance."
+            "Take Note! The Maximum Daily Duration must be less than 300 minutes.",
+            "Once you finish a task for the day, remember to click confirm on the task card!",
+            "Take regular breaks to avoid burnout.",
           ],
           randomTip: '',
       };
@@ -178,7 +175,6 @@
         const deadlineDate = new Date(deadline);
         return deadlineDate < currentDate;
       },
-      
       async deleteTask(task, index) {
         const userId = this.$route.params.id
         const today = new Date().toLocaleDateString("en-CA")
@@ -389,9 +385,8 @@
     padding: 5px; 
     height: 320px;
     position: static;
-
   }
-
+  
   .quote {
     margin: 20px;
     margin-top: 20px;
@@ -401,16 +396,23 @@
     background-color: #e7e7e7bb;
   }
 
-  .quote-content{
+  .quote-content h2{
     font-family: 'Inter';
-    font-weight: 600;
+    font-weight: 400;
     padding: 30px;
+    padding-bottom: 10px;
   }
+
+  .quote-content h4{
+    font-family: 'Inter';
+    font-weight: 700;
+    padding: 30px;
+    padding-top: 0px;
+  }
+
   .tips {
     margin: 10px;
-    margin-right: 0px;
-    padding: 0px;
-    height: wrap-content;
+    margin-right: 100px;
     width: 98%;
     border-radius: 10px;
     background-color: #e7e7e7bb;
@@ -419,12 +421,12 @@
   .tips-content{
     font-family: 'Inter';
     font-weight: 600;
-    padding: 1vw;
+    padding: 10px;
+    max-width: 98%;
   }
   .tips-content h4{
     font-weight: normal;
-    padding-left: 1vw;
-    padding-top: 0.5vh;
+    padding-left: 20px;
   }
 
   .todo-table table {

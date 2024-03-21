@@ -20,11 +20,14 @@
           <textarea class="deets-input" v-model="localTask.description"></textarea>
 
           <div class="taskduration"> 
-            <div class="duration"> Task Daily Duration
+            <div class="duration"> 
+              <div>
+                Task Daily Duration
+                <span class="note">Note! Maximum Daily Duration must be less than 300 minutes.</span>
+              </div>
               <textarea class="dur-input" v-model="localTask.duration"></textarea>
             </div>
           </div>
-
           <div class="categ-section">
             <div class="taskcateg">Task Category </div>
             <select class="categ-input" v-model="localTask.category">
@@ -149,14 +152,28 @@
       margin-bottom: 5px;
     }
 
+    .taskduration{
+      margin-bottom: 7px;
+    }
+    
+    .note{
+      font-size: 10px;
+      font-weight: normal;
+      display: block; 
+      margin-top: 2px; 
+      width: 150px;
+    }
+
     .title-input{
       margin-bottom: 20px;
+      padding: 3px;
       width: 535px;
       height: 30px;
     } 
 
     .deets-input {
       margin-bottom: 20px;
+      padding: 3px;
       position: static;
       width: 535px;
       height: 70px;
@@ -176,6 +193,7 @@
       width: 340px;
       height: 25px;
       resize: none;
+      padding: 3px;
     }
 
     .categ-section {
@@ -188,6 +206,7 @@
     .categ-input {
       margin-left: 40px;
       width: 340px;
+      padding: 3px;
     }
 
     .prio-section {

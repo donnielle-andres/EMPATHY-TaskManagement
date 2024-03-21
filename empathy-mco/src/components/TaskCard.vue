@@ -16,6 +16,10 @@
                             <span class="deadline">Deadline:</span>
                             <span class="deadline">{{ task.deadline }}</span>
                         </div>
+                        <div class="button">
+                          <v-btn class="done-task-btn" @click="deleteTask()"> Done? </v-btn>
+                        </div>
+                        
                     </div>
                </div>
              </v-card-item>
@@ -34,6 +38,11 @@
          type: Object,
          required: true
        }
+    },
+    methods: {
+      deleteTask() {
+        this.$emit('taskDeleted', this.task);
+      }
     }
    }
    </script>
@@ -45,8 +54,29 @@
        height: 150px;
        width: 250px;
        box-shadow: 0 0 8px rgba(0, 0, 0, 0.2); /* Adds a drop shadow */
-       
    }
+
+   .button{
+    padding-left: 70px;
+   }
+
+   .done-task-btn {
+      height: 20px;
+      width: 40px;
+      outline: 2px solid black;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 10px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .done-task-btn:hover{
+      background-color: rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
 
    .task-content {
        padding: 20px;
