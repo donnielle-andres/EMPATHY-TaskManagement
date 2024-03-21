@@ -12,20 +12,38 @@ function calculatePriority(dl, prio) {
 
     let multiplier = 0;
     
-    switch(prio) {
-        case "Low Priority":
-            multiplier = 1
-            break
-        
-        case "Mid Priority":
-            multiplier = 0.75
-            break
-        
-        case "High Priority":
-            multiplier = 0.5
-            break
+    if(difference <= 0){
+        switch(prio) {
+            case "Low Priority":
+                multiplier = 0.5
+                break
+            
+            case "Mid Priority":
+                multiplier = 0.75
+                break
+            
+            case "High Priority":
+                multiplier = 1
+                break
+        }
     }
-
+    else{
+        switch(prio) {
+            case "Low Priority":
+                multiplier = 1
+                break
+            
+            case "Mid Priority":
+                multiplier = 0.75
+                break
+            
+            case "High Priority":
+                multiplier = 0.5
+                break
+        }
+    
+    }
+    
     let priorityVal = difference * multiplier
     
     return priorityVal
