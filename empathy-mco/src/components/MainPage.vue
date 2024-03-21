@@ -409,6 +409,10 @@
     padding: 30px;
     padding-top: 0px;
   }
+  .tips-section {
+    padding-top:20px;
+    padding-bottom:100px;
+  }
 
   .tips {
     margin: 10px;
