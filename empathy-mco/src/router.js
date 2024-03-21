@@ -14,7 +14,7 @@ const routes = [
         component: MainPage
     },
     {
-        path: '/schedboard',
+        path: '/schedboard/:id',
         name: 'SchedBoard',
         component: SchedBoard
     },
