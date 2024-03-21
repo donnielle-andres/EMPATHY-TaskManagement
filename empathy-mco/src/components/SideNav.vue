@@ -18,11 +18,6 @@
                 <span class="menu-name" @click="gotoDashboard()" >Dashboard</span>
             </div>
 
-            <div class="menu-item">
-                <i class="material-symbols-outlined">today</i>
-                <span class="menu-name" @click="gotoSchedule()">Schedule</span>
-            </div>
-
             <div class="menu-item-setting">
                 <i class="material-symbols-outlined">settings</i>
                 <span class="menu-name" @click="gotoSettings()">Settings</span>
