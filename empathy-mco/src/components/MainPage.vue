@@ -20,7 +20,7 @@
 
       <!-- Task Cards -->
       <div class="task-cards">
-        <task-card v-for="(task, index) in currentDayTasks" :key="index" :task="task" />
+        <task-card class="task-card" v-for="(task, index) in currentDayTasks" :key="index" :task="task" @click="deleteTask(task, index)"/>
       </div>
       
     </div>
@@ -86,6 +86,10 @@
 <script>
   import { getTasksForUser, getTodayTasksForUser } from '../util/DatabaseFunctions.js'
   import axios from 'axios';
+  import { db } from '../util/firebase.js'
+
+  import { collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore"
+
   export default {
     name: 'MainPage',
     data() {
@@ -144,6 +148,44 @@
       },
       addTask() {
         this.showAddTask = true;
+      },
+      async deleteTask(task, index) {
+        const userId = this.$route.params.id
+        const today = new Date().toLocaleDateString("en-CA")
+        const dailyTaskRef = doc(db, "Users", userId, "Daily", today, "Tasks", task.id)
+
+        await updateDoc(dailyTaskRef, {
+          finish: true
+        })
+        this.currentDayTasks.splice(index, 0)
+        this.updateDailies()
+      },
+      async updateDailies() {
+        const userId = this.$route.params.id
+        const today = new Date().toLocaleDateString("en-CA")
+        const dailyRef = collection(db, "Users", userId, "Daily", today, "Tasks")
+
+        const dailyTasksDocs = await getDocs(dailyRef)     
+
+        this.currentDayTasks = []
+        dailyTasksDocs.forEach((task) => {
+          if(!task.data().finish) {
+            console.log(task.data())
+            let t = task.data()
+            this.currentDayTasks.push({
+                id: t.id,
+                title: t.title,
+                description: t.description,
+                duration: t.duration,
+                category: t.category,
+                priority: t.priority,
+                priority_val: t.priority_val,
+                status: t.status,
+                deadline: t.deadline,
+                finish: t.finish
+            })
+          }
+        })
       },
       updateTask(task){
         console.log("Opening Update Task Form for: " + task.id)
@@ -268,6 +310,11 @@
     gap: 20px; 
     padding: 10px; 
     margin-left: 30px;
+  }
+
+  .task-card:hover {
+    background-color: rgba(0, 0, 0, 0.1); 
+    cursor: pointer;
   }
 
 

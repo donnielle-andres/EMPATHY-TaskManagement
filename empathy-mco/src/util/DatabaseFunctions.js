@@ -133,10 +133,11 @@ async function getTodayTasksForUser(userId, today) {
         console.log("Testing today: " +  today)
         const dailyRef = collection(db, "Users", userId, "Daily", today, "Tasks")
         const testDocs = await getDocs(dailyRef)
-        console.log("Testing this: " + testDocs.empty)
+
         let todayTasks = []
         let totalTime = 0
         console.log(testDocs.empty)
+
         if(testDocs.empty) {            
             for(let i = 0;i < tasks.length;i++) {
                 let tempDuration = Number(tasks[i].duration)
@@ -148,7 +149,7 @@ async function getTodayTasksForUser(userId, today) {
                 }
                 else {
                     console.log("Added " + tasks[i].title + "| Time is now " + totalTime)
-                    await addDoc(dailyRef, {
+                    await setDoc(doc(dailyRef, tasks[i].id), {
                         id: tasks[i].id,
                         title: tasks[i].title,
                         description: tasks[i].description,
@@ -158,6 +159,7 @@ async function getTodayTasksForUser(userId, today) {
                         priority_val: tasks[i].priority_val,
                         status: tasks[i].status,
                         deadline: tasks[i].deadline,
+                        finish: false
                     })
                 }
             }
@@ -166,19 +168,22 @@ async function getTodayTasksForUser(userId, today) {
         const dailyTasksDocs = await getDocs(dailyRef)     
 
         dailyTasksDocs.forEach((task) => {
-            console.log(task.data())
-            let t = task.data()
-            todayTasks.push({
-                id: t.id,
-                title: t.title,
-                description: t.description,
-                duration: t.duration,
-                category: t.category,
-                priority: t.priority,
-                priority_val: t.priority_val,
-                status: t.status,
-                deadline: t.deadline,
-            })
+            if(!task.data().finish) {
+                console.log(task.data())
+                let t = task.data()
+                todayTasks.push({
+                    id: t.id,
+                    title: t.title,
+                    description: t.description,
+                    duration: t.duration,
+                    category: t.category,
+                    priority: t.priority,
+                    priority_val: t.priority_val,
+                    status: t.status,
+                    deadline: t.deadline,
+                    finish: t.finish
+                })
+            } 
         })
         
         todayTasks.forEach((t) => {
