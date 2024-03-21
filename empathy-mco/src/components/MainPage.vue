@@ -399,6 +399,8 @@
   .quote-content h2{
     font-family: 'Inter';
     font-weight: 400;
+    font-size: medium;
+    text-align: justify;
     padding: 30px;
     padding-bottom: 10px;
   }
@@ -406,6 +408,7 @@
   .quote-content h4{
     font-family: 'Inter';
     font-weight: 700;
+    font-size: small;
     padding: 30px;
     padding-top: 0px;
   }
