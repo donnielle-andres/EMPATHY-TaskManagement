@@ -39,7 +39,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(task, index) in allTasks" :key="index" @click="updateTask(task)">
+                  <tr v-for="(task, index) in allTasks" :key="index" @click="updateTask(task)" :class="{ 'overdue': isDeadlineBeforeToday(task.deadline) }">
                     <td>{{ task.title }}</td>
                     <td>{{ task.description }}</td>
                     <td>{{ task.category }}</td>
@@ -49,7 +49,18 @@
                   </tr>
                 </tbody>
             </table>
-
+            <div class="right-section">
+              <div class="tips">
+                <div class="tips-content">
+                  <h2>
+                    💡 Tips!
+                  </h2>
+                  <h4>
+                    {{ randomTip }}
+                  </h4>
+              </div>
+            </div>
+          </div>
             <!-- Overlay for the Update Task -->
 
             <div v-if="showUpdateTaskForm" class="updateTaskOverlay">
@@ -111,6 +122,14 @@
             { text: 'Status', value: 'status' },
           ],
           quote: '',
+          tipsArray: [
+            "Tip 1: Always start with a clear goal.",
+            "Tip 2: Break down your tasks into manageable parts.",
+            "Tip 3: Take regular breaks to avoid burnout.",
+            "Tip 4: Stay organized with a to-do list.",
+            "Tip 5: Prioritize your tasks based on urgency and importance."
+          ],
+          randomTip: '',
       };
     },
 
@@ -127,6 +146,7 @@
     mounted() {
       this.getCurrentTime();
       this.getCurrentDay();
+      this.getRandomTip();
       setInterval(() => {
         this.getCurrentTime();
       }, 1000); // Update time every second
@@ -149,6 +169,16 @@
       addTask() {
         this.showAddTask = true;
       },
+      getRandomTip() {
+        const randomIndex = Math.floor(Math.random() * this.tipsArray.length);
+        this.randomTip = this.tipsArray[randomIndex];
+      },
+      isDeadlineBeforeToday(deadline) {
+        const currentDate = new Date();
+        const deadlineDate = new Date(deadline);
+        return deadlineDate < currentDate;
+      },
+      
       async deleteTask(task, index) {
         const userId = this.$route.params.id
         const today = new Date().toLocaleDateString("en-CA")
@@ -346,6 +376,13 @@
     height: 260px;
   }
 
+  .overdue {
+    background-color: #f8d7da; /* Example background color for overdue tasks */
+  }
+
+  .todo-table tr.overdue:hover {
+    background-color: #f5c6cb; /* Example background color for overdue tasks */
+  }
 
   .right-section {
     flex: 3; 
@@ -368,6 +405,26 @@
     font-family: 'Inter';
     font-weight: 600;
     padding: 30px;
+  }
+  .tips {
+    margin: 10px;
+    margin-right: 0px;
+    padding: 0px;
+    height: wrap-content;
+    width: 98%;
+    border-radius: 10px;
+    background-color: #e7e7e7bb;
+  }
+
+  .tips-content{
+    font-family: 'Inter';
+    font-weight: 600;
+    padding: 1vw;
+  }
+  .tips-content h4{
+    font-weight: normal;
+    padding-left: 1vw;
+    padding-top: 0.5vh;
   }
 
   .todo-table table {

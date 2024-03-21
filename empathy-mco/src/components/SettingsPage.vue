@@ -18,14 +18,12 @@
                     <label for="task-category-prioritization">Task Categories:</label>
                     <div class="prio-input">
                         <div v-for="(category, index) in taskCategories" :key="index" class="task-priority-container">
-                            <h4>{{ category.number }} </h4> <h4> {{ category.value}} </h4>
+                            <h4>{{ category.number }} </h4> <h4 class="category_value"> {{ category.value}} </h4>
                             <span class="material-symbols-outlined delete-button" @click="deleteTaskCategory(index)"> delete </span>
                         </div>
                         <div class="prio-btn">
                             <button @click="addCategory">Add Task Category</button> <input type="text" class="taskCategory" v-model="taskCategory"/>
                         </div>
-                        
-                        
                     </div>
                 </div>
 
@@ -252,7 +250,13 @@ import { doc, getDoc, getDocs, deleteDoc, addDoc, collection } from "firebase/fi
         margin-left: 1vh;
         margin-right: 1vh;
         height: 4vh;
-        width: 25vh;
+        width:1vw;
+        max-width: 25vw;
+    }
+
+    .category_value {
+        font-weight: normal;
+        width:auto;
     }
 
     .dailytime-container {
