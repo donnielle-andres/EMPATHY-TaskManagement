@@ -189,7 +189,11 @@
           })
         }
 
-        this.currentDayTasks = await getTodayTasksForUser(this.userId)
+        const today = new Date().toLocaleDateString("en-CA")
+        this.currentDayTasks = await getTodayTasksForUser(this.userId, today)
+
+
+        
 
       }
     },

@@ -1,4 +1,4 @@
-import { doc, collection, getDocs, getDoc } from "firebase/firestore";
+import { get, doc, collection, getDocs, getDoc, addDoc, setDoc } from "firebase/firestore";
 import { db } from './firebase.js'
 
 function calculatePriority(dl, prio) {
@@ -89,7 +89,7 @@ async function getTasksForUser(userId) {
     
 }
 
-async function getTodayTasksForUser(userId) {
+async function getTodayTasksForUser(userId, today) {
     let tasks = []
 
     const userRef = doc(db, "Users", userId)
@@ -101,6 +101,7 @@ async function getTodayTasksForUser(userId) {
         const tasksRef = collection(db, "Users", userId, "Tasks")
         const tasksResults = await getDocs(tasksRef);
 
+        
         tasksResults.forEach((doc) => {
 
             const data = doc.data()
@@ -126,23 +127,63 @@ async function getTodayTasksForUser(userId) {
             return a.priority_val - b.priority_val
         })
 
+        // await setDoc(doc(db, "Users", userId, "Daily", today), {
+        //     value: "test"
+        // })
+        console.log("Testing today: " +  today)
+        const dailyRef = collection(db, "Users", userId, "Daily", today, "Tasks")
+        const testDocs = await getDocs(dailyRef)
+        console.log("Testing this: " + testDocs.empty)
         let todayTasks = []
         let totalTime = 0
-
-        for(let i = 0;i < tasks.length;i++) {
-            let tempDuration = Number(tasks[i].duration)
-            totalTime += tempDuration
-
-            if(totalTime > 300) {
-                console.log(totalTime)
-                break;
-            }
-            else {
-                console.log("Added " + tasks[i].title + "| Time is now " + totalTime)
-                todayTasks.push(tasks[i])
+        console.log(testDocs.empty)
+        if(testDocs.empty) {            
+            for(let i = 0;i < tasks.length;i++) {
+                let tempDuration = Number(tasks[i].duration)
+                totalTime += tempDuration
+    
+                if(totalTime > 300) {
+                    console.log(totalTime)
+                    break;
+                }
+                else {
+                    console.log("Added " + tasks[i].title + "| Time is now " + totalTime)
+                    await addDoc(dailyRef, {
+                        id: tasks[i].id,
+                        title: tasks[i].title,
+                        description: tasks[i].description,
+                        duration: tasks[i].duration,
+                        category: tasks[i].category,
+                        priority: tasks[i].priority,
+                        priority_val: tasks[i].priority_val,
+                        status: tasks[i].status,
+                        deadline: tasks[i].deadline,
+                    })
+                }
             }
         }
-    
+
+        const dailyTasksDocs = await getDocs(dailyRef)     
+
+        dailyTasksDocs.forEach((task) => {
+            console.log(task.data())
+            let t = task.data()
+            todayTasks.push({
+                id: t.id,
+                title: t.title,
+                description: t.description,
+                duration: t.duration,
+                category: t.category,
+                priority: t.priority,
+                priority_val: t.priority_val,
+                status: t.status,
+                deadline: t.deadline,
+            })
+        })
+        
+        todayTasks.forEach((t) => {
+            console.log(t)
+        })
         return todayTasks
     }
 
