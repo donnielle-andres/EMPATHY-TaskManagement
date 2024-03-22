@@ -1,36 +1,41 @@
 <template>
-    <v-container>
-       <v-row>
-         <v-col cols="auto">
-           <v-card class="mx-auto" max-width="344">
-
-             <v-card-item>
-               <div class="task-content">
-                    <div class="task-title"> {{ task.title }} </div>
-
-                    <div class="task-description"> {{ task.description }} </div>
-
-                    <div class="task-deadline">
-                        <i class="material-symbols-outlined">alarm</i>
-                        <div>
-                            <span class="deadline">Deadline:</span>
-                            <span class="deadline">{{ task.deadline }}</span>
-                        </div>
-                        <div class="button">
-                          <v-btn class="done-task-btn" @click="deleteTask()"> Done? </v-btn>
-                        </div>
-                        
-                    </div>
-               </div>
-             </v-card-item>
-   
-           </v-card>
-         </v-col>
-       </v-row>
-    </v-container>
-   </template>
+  <v-container>
+      <v-row>
+        <v-col cols="auto">
+          <v-card class="mx-auto" max-width="344">
+            <v-card-item>
+              <div class="task-content">
+                <div class="task-title">
+                  <input v-if="isEditing" v-model="localTask.title" type="text">
+                  <div v-else>{{ localTask.title }}</div>
+                </div>
+                <div class="task-description">
+                  <textarea v-if="isEditing" v-model="localTask.description"></textarea>
+                  <div v-else>{{ localTask.description }}</div>
+                </div>
+                <div class="task-deadline">
+                  <i class="material-symbols-outlined">alarm</i>
+                  <div>
+                  <span class="deadline">Deadline:</span>
+                  <span class="deadline">{{ localTask.deadline }}</span>
+                  </div>
+                  <div class="button">
+                  <v-btn class="done-task-btn" @click="deleteTask()"> Done? </v-btn>
+                  </div>
+                </div>
+              </div>
+            </v-card-item>
+          </v-card>
+        </v-col>
+      </v-row>
+  </v-container>
+ </template>
+ 
+ 
    
    <script>
+   import { db } from '../util/firebase.js';
+   import { doc,  getDoc } from "firebase/firestore";
    export default {
     name: 'TaskCard',
     props: {
@@ -39,17 +44,48 @@
          required: true
        }
     },
+    data() {
+      return {
+          isEditing: false, // Flag to toggle edit mode
+          localTask: {
+            title: this.task.title,
+            description: this.task.description, 
+            deadline: this.task.deadline 
+          }
+      };
+    },
+    created() {
+      this.fetchTaskData();
+    },
     methods: {
       deleteTask() {
         this.$emit('taskDeleted', this.task);
+      },
+      async fetchTaskData() {
+        try {
+              const taskRef = doc(db, 'Users', this.userId, "Tasks", this.task.id);
+              const taskDoc = await getDoc(taskRef);
+              if (taskDoc.exists()) {
+                this.localTask = {
+                  title: taskDoc.data().Title, // Assuming the field name in Firestore is 'title'
+                  description: taskDoc.data().Description, // Assuming the field name in Firestore is 'description'
+                  deadline: taskDoc.data().Deadline // Assuming the field name in Firestore is 'deadline'
+                };
+              } else {
+                console.log("No such document!");
+              }
+        } catch (error) {
+              console.error("Error fetching task data:", error);
+        }
       }
+
     }
    }
    </script>
    
 <style scoped>
    v-container {
-       background-color: #C1D8C3;
+       background-color: #d7c1d8;
        border-radius: 10px;
        height: 150px;
        width: 250px;
@@ -74,7 +110,7 @@
     }
 
     .done-task-btn:hover{
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: rgba(198, 255, 195, 0.656);
       cursor: pointer;
     }
 

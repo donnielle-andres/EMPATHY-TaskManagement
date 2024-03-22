@@ -338,11 +338,6 @@
     margin-left: 30px;
   }
 
-  .task-card:hover {
-    background-color: rgba(0, 0, 0, 0.1); 
-    cursor: pointer;
-  }
-
 
   /** To Do List Section Style */
   .todo-section {
