@@ -66,7 +66,7 @@
             </div>
 
             <div class="taskddl-right" @click="showDatePicker = showDatePicker">
-              {{ localTask.deadline }}
+              {{ formattedDate }}
               <v-date-picker
                 v-if="showDatePicker"
                 v-model="localTask.deadline"
