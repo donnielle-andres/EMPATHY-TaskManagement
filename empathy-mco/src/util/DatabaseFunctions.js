@@ -1,4 +1,4 @@
-import { get, doc, collection, getDocs, getDoc, addDoc, setDoc } from "firebase/firestore";
+import { get, doc, collection, deleteDoc, getDocs, getDoc, addDoc, setDoc } from "firebase/firestore";
 import { db } from './firebase.js'
 
 function calculatePriority(dl, prio) {
@@ -138,30 +138,32 @@ async function getTodayTasksForUser(userId, today) {
         let totalTime = 0
         console.log(testDocs.empty)
 
-        if(testDocs.empty) {            
-            for(let i = 0;i < tasks.length;i++) {
-                let tempDuration = Number(tasks[i].duration)
-                totalTime += tempDuration
-    
-                if(totalTime > 300) {
-                    console.log(totalTime)
-                    break;
-                }
-                else {
-                    console.log("Added " + tasks[i].title + "| Time is now " + totalTime)
-                    await setDoc(doc(dailyRef, tasks[i].id), {
-                        id: tasks[i].id,
-                        title: tasks[i].title,
-                        description: tasks[i].description,
-                        duration: tasks[i].duration,
-                        category: tasks[i].category,
-                        priority: tasks[i].priority,
-                        priority_val: tasks[i].priority_val,
-                        status: tasks[i].status,
-                        deadline: tasks[i].deadline,
-                        finish: false
-                    })
-                }
+        testDocs.forEach((data)=> {
+            deleteDoc(doc(dailyRef, data.id))
+        })
+
+        for(let i = 0;i < tasks.length;i++) {
+            let tempDuration = Number(tasks[i].duration)
+            totalTime += tempDuration
+
+            if(totalTime > 300) {
+                console.log(totalTime)
+                break;
+            }
+            else {
+                console.log("Added " + tasks[i].title + "| Time is now " + totalTime)
+                await setDoc(doc(dailyRef, tasks[i].id), {
+                    id: tasks[i].id,
+                    title: tasks[i].title,
+                    description: tasks[i].description,
+                    duration: tasks[i].duration,
+                    category: tasks[i].category,
+                    priority: tasks[i].priority,
+                    priority_val: tasks[i].priority_val,
+                    status: tasks[i].status,
+                    deadline: tasks[i].deadline,
+                    finish: false
+                })
             }
         }
 

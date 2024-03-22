@@ -38,6 +38,7 @@ export default {
         async updateTask() {
           // Get numerical priority value so we can sort/schedule tasks
           const date = new Date(this.formattedDate);
+          const today = new Date().toLocaleDateString("en-CA")
           const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
           const prioVal = calculatePriority(date.toLocaleDateString('en-CA', options), this.localTask.priority)
@@ -52,6 +53,18 @@ export default {
                   Priority_Value: prioVal,
                   Status: this.localTask.status,
                   Deadline: date.toLocaleDateString('en-CA', options)
+              })
+
+              const dailyRef = doc(db, "Users", this.userId, "Daily", today, "Tasks", this.task.id)
+              const reference2 = await updateDoc(dailyRef, {
+                  title: this.localTask.title,
+                  description: this.localTask.description,
+                  duration: this.localTask.duration,
+                  category: this.localTask.category,
+                  priority: this.localTask.priority,
+                  priority_val: prioVal,
+                  status: this.localTask.status,
+                  deadline: date.toLocaleDateString('en-CA', options)
               })
           } catch(e) {
               console.log(e)
