@@ -52,12 +52,12 @@
             <div class="tips-section">
               <div class="tips">
                 <div class="tips-content">
-                  <h2>
+                  <h3>
                     💡 Tips!
-                  </h2>
-                  <h4>
+                  </h3>
+                  <h5>
                     {{ randomTip }}
-                  </h4>
+                  </h5>
               </div>
             </div>
           </div>
@@ -431,9 +431,11 @@
     padding: 10px;
     max-width: 98%;
   }
-  .tips-content h4{
+
+  .tips-content h5{
     font-weight: normal;
-    padding-left: 20px;
+    padding-left: 33px;
+    margin-top: 10px;
   }
 
   .todo-table table {
@@ -455,6 +457,7 @@
       padding: 8px;
       text-align: left;
       font-size: 13px;
+      max-width: 130px;
   }
 
   .todo-table th {
