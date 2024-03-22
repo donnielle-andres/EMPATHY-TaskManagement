@@ -17,3 +17,5 @@
    npm run serve
 
 4. Open ```localhost``` link
+
+5. Type ```/testId1``` after the local host link
