@@ -123,7 +123,7 @@
           quote: '',
           tipsArray: [
             "Take Note! The Maximum Daily Duration must be less than 300 minutes.",
-            "Once you finish a task for the day, remember to click confirm on the task card!",
+            "Once you finish a task for the day, remember to click 'Done?' on the task card!",
             "Take regular breaks to avoid burnout.",
           ],
           randomTip: '',
@@ -373,11 +373,11 @@
   }
 
   .overdue {
-    background-color: #f8d7da; /* Example background color for overdue tasks */
+    background-color: #ffe6e8; /* Example background color for overdue tasks */
   }
 
   .todo-table tr.overdue:hover {
-    background-color: #f5c6cb; /* Example background color for overdue tasks */
+    background-color: #ffe0e2; /* Example background color for overdue tasks */
   }
 
   .right-section {
