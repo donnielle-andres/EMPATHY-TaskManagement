@@ -1,19 +1,19 @@
 <template>
   <v-container>
-      <v-row>
-        <v-col cols="auto">
-          <v-card class="mx-auto" max-width="344">
-            <v-card-item>
-              <div class="task-content">
-                <div class="task-title">
+       <v-row>
+         <v-col cols="auto">
+           <v-card class="mx-auto" max-width="344">
+             <v-card-item>
+               <div class="task-content">
+                 <div class="task-title">
                   <input v-if="isEditing" v-model="localTask.title" type="text">
                   <div v-else>{{ localTask.title }}</div>
-                </div>
-                <div class="task-description">
+                 </div>
+                 <div class="task-description">
                   <textarea v-if="isEditing" v-model="localTask.description"></textarea>
                   <div v-else>{{ localTask.description }}</div>
-                </div>
-                <div class="task-deadline">
+                 </div>
+                 <div class="task-deadline">
                   <i class="material-symbols-outlined">alarm</i>
                   <div>
                   <span class="deadline">Deadline:</span>
@@ -22,66 +22,69 @@
                   <div class="button">
                   <v-btn class="done-task-btn" @click="deleteTask()"> Done? </v-btn>
                   </div>
-                </div>
-              </div>
-            </v-card-item>
-          </v-card>
-        </v-col>
-      </v-row>
+                 </div>
+               </div>
+             </v-card-item>
+           </v-card>
+         </v-col>
+       </v-row>
   </v-container>
  </template>
  
+ <script>
+ import { getTodayTasksForUser } from '../util/DatabaseFunctions.js';
  
-   
-   <script>
-   import { db } from '../util/firebase.js';
-   import { doc,  getDoc } from "firebase/firestore";
-   export default {
-    name: 'TaskCard',
-    props: {
-       task: {
-         type: Object,
-         required: true
+ export default {
+  name: 'TaskCard',
+  props: {
+     task: {
+       type: Object,
+       required: true
+     },
+     userId: {
+       type: String,
+       required: true
+     },
+     today: {
+       type: String,
+       required: true
+     }
+  },
+  data() {
+     return {
+       isEditing: false, // Flag to toggle edit mode
+       localTask: {
+         title: this.task ? this.task.title : '',
+         description: this.task ? this.task.description : '', 
+         deadline: this.task ? this.task.deadline : ''
        }
-    },
-    data() {
-      return {
-          isEditing: false, // Flag to toggle edit mode
-          localTask: {
-            title: this.task.title,
-            description: this.task.description, 
-            deadline: this.task.deadline 
-          }
-      };
-    },
-    created() {
-      this.fetchTaskData();
-    },
-    methods: {
-      deleteTask() {
-        this.$emit('taskDeleted', this.task);
-      },
-      async fetchTaskData() {
-        try {
-              const taskRef = doc(db, 'Users', this.userId, "Tasks", this.task.id);
-              const taskDoc = await getDoc(taskRef);
-              if (taskDoc.exists()) {
-                this.localTask = {
-                  title: taskDoc.data().Title, // Assuming the field name in Firestore is 'title'
-                  description: taskDoc.data().Description, // Assuming the field name in Firestore is 'description'
-                  deadline: taskDoc.data().Deadline // Assuming the field name in Firestore is 'deadline'
-                };
-              } else {
-                console.log("No such document!");
-              }
-        } catch (error) {
-              console.error("Error fetching task data:", error);
-        }
-      }
-
-    }
-   }
-   </script>
+     };
+  },
+  created() {
+     // Assuming userId and today are passed as props
+     this.fetchTaskData(this.userId, this.today);
+  },
+  methods: {
+     deleteTask() {
+       this.$emit('taskDeleted', this.task);
+     },
+     async fetchTaskData(userId, today) {
+       try {
+         const tasks = await getTodayTasksForUser(userId, today);
+         if (tasks && tasks.length > 0) {
+           // Assuming you want to display the first task for now
+           this.localTask = tasks[0];
+         } else {
+           console.log("No tasks found for today.");
+         }
+       } catch (error) {
+         console.error("Error fetching task data:", error);
+       }
+     }
+  }
+ }
+ </script>
+ 
    
 <style scoped>
    v-container {
